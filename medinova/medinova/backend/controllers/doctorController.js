@@ -4,33 +4,44 @@ const getAllDoctors = async (req, res) => {
   try {
     const [doctors] = await db.promise().query(`
       SELECT u.id, u.name, u.email, u.phone,
-             d.specialization, d.experience,
-             d.fees, d.location, d.bio, d.available
+             COALESCE(d.specialization, 'General Physician') AS specialization,
+             COALESCE(d.experience, '') AS experience,
+             COALESCE(d.fees, 0) AS fees,
+             COALESCE(d.location, '') AS location,
+             COALESCE(d.bio, '') AS bio,
+             COALESCE(d.available, 1) AS available
       FROM users u
-      JOIN doctor_profiles d ON u.id = d.user_id
+      LEFT JOIN doctor_profiles d ON u.id = d.user_id
       WHERE u.role = 'doctor'
     `);
-    res.status(200).json(doctors);
+
+    return res.status(200).json(doctors);
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
+    return res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
 
 const searchDoctors = async (req, res) => {
-  const { query } = req.query;
+  const query = String(req.query?.query || '').trim();
+
   try {
     const [doctors] = await db.promise().query(`
       SELECT u.id, u.name, u.email, u.phone,
-             d.specialization, d.experience,
-             d.fees, d.location, d.bio, d.available
+             COALESCE(d.specialization, 'General Physician') AS specialization,
+             COALESCE(d.experience, '') AS experience,
+             COALESCE(d.fees, 0) AS fees,
+             COALESCE(d.location, '') AS location,
+             COALESCE(d.bio, '') AS bio,
+             COALESCE(d.available, 1) AS available
       FROM users u
-      JOIN doctor_profiles d ON u.id = d.user_id
+      LEFT JOIN doctor_profiles d ON u.id = d.user_id
       WHERE u.role = 'doctor'
-      AND (u.name LIKE ? OR d.specialization LIKE ? OR d.location LIKE ?)
+      AND (u.name LIKE ? OR COALESCE(d.specialization, '') LIKE ? OR COALESCE(d.location, '') LIKE ?)
     `, [`%${query}%`, `%${query}%`, `%${query}%`]);
-    res.status(200).json(doctors);
+
+    return res.status(200).json(doctors);
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
+    return res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
 

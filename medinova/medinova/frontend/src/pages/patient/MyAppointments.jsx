@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import { getActiveVideoCall, subscribeToVideoCallSession } from '../../utils/videoCallSession'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 const filters = ['all', 'pending', 'confirmed', 'completed', 'rejected']
 

@@ -1,15 +1,15 @@
 import { useMemo, useState } from 'react'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import { Link, useNavigate } from 'react-router-dom'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 const roles = [
-  { value: 'patient', icon: '🤒', label: 'Patient' },
-  { value: 'doctor', icon: '🩺', label: 'Doctor' },
-  { value: 'store', icon: '💊', label: 'Medical Store' },
-  { value: 'mr', icon: '💼', label: 'Medicine Rep' },
-  { value: 'admin', icon: '🛠️', label: 'Admin' }, // ✅ NEW
+  { value: 'patient', icon: 'ðŸ¤’', label: 'Patient' },
+  { value: 'doctor', icon: 'ðŸ©º', label: 'Doctor' },
+  { value: 'store', icon: 'ðŸ’Š', label: 'Medical Store' },
+  { value: 'mr', icon: 'ðŸ’¼', label: 'Medicine Rep' },
+  { value: 'admin', icon: 'ðŸ› ï¸', label: 'Admin' }, // âœ… NEW
 ]
 
 const initialForm = {
@@ -287,7 +287,7 @@ function Register() {
                     fontSize: '78px',
                   }}
                 >
-                  <span style={{ filter: 'drop-shadow(0 10px 18px rgba(56,189,248,0.18))' }}>🩺</span>
+                  <span style={{ filter: 'drop-shadow(0 10px 18px rgba(56,189,248,0.18))' }}>ðŸ©º</span>
                 </div>
               </div>
 

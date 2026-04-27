@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import { demoAppointmentRequests } from '../../utils/demoData'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 const G = {
   900:'#072E25',800:'#0D5C4A',700:'#0F7A62',600:'#118A6F',
@@ -148,7 +148,7 @@ export default function DoctorAppointments() {
                   { label:'Confirmed', value:counts.confirmed, color:G[200] },
                 ].map(c => (
                   <div key={c.label} style={{ background:'rgba(255,255,255,0.10)', border:'1px solid rgba(255,255,255,0.16)', borderRadius:'12px', padding:'8px 14px', textAlign:'center' }}>
-                    <div style={{ fontSize:'20px', fontWeight:700, color:c.color }}>{loading ? '—' : c.value}</div>
+                    <div style={{ fontSize:'20px', fontWeight:700, color:c.color }}>{loading ? 'â€”' : c.value}</div>
                     <div style={{ fontSize:'10px', fontWeight:700, color:c.color, opacity:0.8, textTransform:'uppercase', letterSpacing:'0.07em' }}>{c.label}</div>
                   </div>
                 ))}
@@ -176,10 +176,10 @@ export default function DoctorAppointments() {
           </div>
           {/* Search */}
           <div style={{ position:'relative' }}>
-            <span style={{ position:'absolute', left:'11px', top:'50%', transform:'translateY(-50%)', fontSize:'14px', pointerEvents:'none' }}>🔍</span>
+            <span style={{ position:'absolute', left:'11px', top:'50%', transform:'translateY(-50%)', fontSize:'14px', pointerEvents:'none' }}>ðŸ”</span>
             <input
               value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Search patient, date…"
+              placeholder="Search patient, dateâ€¦"
               style={{ paddingLeft:'32px', paddingRight:'12px', paddingTop:'8px', paddingBottom:'8px', borderRadius:'10px', border:`1px solid ${G[100]}`, background:G[25], fontSize:'13px', color:G[900], outline:'none', width:'200px' }}
             />
           </div>
@@ -188,10 +188,10 @@ export default function DoctorAppointments() {
         {/* Table */}
         <div style={{ background:'#fff', borderRadius:'18px', border:`1px solid ${G[100]}`, overflow:'hidden', boxShadow:`0 2px 10px rgba(13,92,74,0.05)` }}>
           {loading ? (
-            <div style={{ padding:'40px', textAlign:'center', color:'#94A3B8', fontSize:'14px' }}>Loading appointments…</div>
+            <div style={{ padding:'40px', textAlign:'center', color:'#94A3B8', fontSize:'14px' }}>Loading appointmentsâ€¦</div>
           ) : filtered.length === 0 ? (
             <div style={{ padding:'48px', textAlign:'center' }}>
-              <div style={{ fontSize:'32px', marginBottom:'10px' }}>📋</div>
+              <div style={{ fontSize:'32px', marginBottom:'10px' }}>ðŸ“‹</div>
               <div style={{ fontSize:'15px', fontWeight:700, color:G[900], marginBottom:'4px' }}>No appointments found</div>
               <div style={{ fontSize:'13px', color:'#94A3B8' }}>Try changing the filter or search term.</div>
             </div>
@@ -216,13 +216,13 @@ export default function DoctorAppointments() {
                             {apt.patient_name?.charAt(0)?.toUpperCase() || '?'}
                           </div>
                           <div>
-                            <div style={{ fontSize:'13px', fontWeight:700, color:G[900] }}>{apt.patient_name || '—'}</div>
+                            <div style={{ fontSize:'13px', fontWeight:700, color:G[900] }}>{apt.patient_name || 'â€”'}</div>
                             <div style={{ fontSize:'11px', color:'#94A3B8' }}>ID #{apt.id}</div>
                           </div>
                         </div>
                       </td>
-                      <td style={{ padding:'13px 16px', fontSize:'13px', color:G[800], fontWeight:600, whiteSpace:'nowrap' }}>{apt.date || '—'}</td>
-                      <td style={{ padding:'13px 16px', fontSize:'13px', color:G[700], whiteSpace:'nowrap' }}>{apt.time_slot || '—'}</td>
+                      <td style={{ padding:'13px 16px', fontSize:'13px', color:G[800], fontWeight:600, whiteSpace:'nowrap' }}>{apt.date || 'â€”'}</td>
+                      <td style={{ padding:'13px 16px', fontSize:'13px', color:G[700], whiteSpace:'nowrap' }}>{apt.time_slot || 'â€”'}</td>
                       <td style={{ padding:'13px 16px', fontSize:'12px', color:'#64748B', maxWidth:'180px' }}>
                         <div style={{ overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{apt.reason || apt.notes || 'General consultation'}</div>
                       </td>
@@ -233,11 +233,11 @@ export default function DoctorAppointments() {
                             <>
                               <button onClick={() => setConfirm({ id:apt.id, action:'confirm' })} disabled={working===apt.id}
                                 style={{ padding:'6px 12px', borderRadius:'8px', border:`1px solid ${G[200]}`, background:G[50], color:G[800], fontWeight:700, fontSize:'11px', cursor:'pointer' }}>
-                                ✓ Confirm
+                                âœ“ Confirm
                               </button>
                               <button onClick={() => setConfirm({ id:apt.id, action:'reject' })} disabled={working===apt.id}
                                 style={{ padding:'6px 12px', borderRadius:'8px', border:'1px solid #FECACA', background:'#FEF2F2', color:'#DC2626', fontWeight:700, fontSize:'11px', cursor:'pointer' }}>
-                                ✕ Reject
+                                âœ• Reject
                               </button>
                             </>
                           )}
@@ -254,7 +254,7 @@ export default function DoctorAppointments() {
                             </>
                           )}
                           {(apt.status === 'completed' || apt.status === 'rejected') && (
-                            <span style={{ fontSize:'11px', color:'#94A3B8', padding:'6px 0' }}>—</span>
+                            <span style={{ fontSize:'11px', color:'#94A3B8', padding:'6px 0' }}>â€”</span>
                           )}
                         </div>
                       </td>

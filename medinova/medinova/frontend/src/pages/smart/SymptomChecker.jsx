@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 
 function SymptomChecker() {
   const [symptoms,    setSymptoms]    = useState('')
@@ -15,7 +16,7 @@ function SymptomChecker() {
     setLoading(true)
     setError('')
     try {
-      const res = await axios.post('http://localhost:5000/api/smart/symptoms',
+      const res = await axios.post(`${API_BASE_URL}/api/smart/symptoms`,
         { symptoms },
         { headers: { Authorization: `Bearer ${token}` } }
       )

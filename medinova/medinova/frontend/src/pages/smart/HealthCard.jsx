@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 function HealthCard() {
   const [data,     setData]     = useState(null)
@@ -53,7 +53,7 @@ function HealthCard() {
 
         <div className="fade-up" style={{ marginBottom:'28px' }}>
           <Link to="/patient/dashboard" style={{ color:'var(--color-text-muted)', fontSize:'13px', textDecoration:'none', display:'inline-flex', alignItems:'center', gap:'4px', marginBottom:'12px' }}>
-            ← Back to Dashboard
+            â† Back to Dashboard
           </Link>
           <h1 style={{ fontFamily:'var(--font-heading)', fontSize:'32px', color:'var(--color-primary)', marginBottom:'6px' }}>
             Digital Health Card
@@ -63,7 +63,7 @@ function HealthCard() {
 
         {msg && (
           <div style={{ background:'#E8F5E9', color:'#2E7D32', padding:'12px 16px', borderRadius:'var(--radius-md)', marginBottom:'20px', borderLeft:'3px solid #43A047', fontWeight:'600' }}>
-            ✅ {msg}
+            âœ… {msg}
           </div>
         )}
 
@@ -80,7 +80,7 @@ function HealthCard() {
                     <div style={{ background:'rgba(255,255,255,0.2)', borderRadius:'12px', padding:'8px 14px', fontSize:'13px', fontWeight:'600' }}>
                       medinova health card
                     </div>
-                    <div style={{ fontSize:'28px' }}>🏥</div>
+                    <div style={{ fontSize:'28px' }}>ðŸ¥</div>
                   </div>
 
                   <div style={{ width:'52px', height:'52px', background:'rgba(255,255,255,0.2)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'22px', fontWeight:'700', marginBottom:'12px' }}>
@@ -92,7 +92,7 @@ function HealthCard() {
                   <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px' }}>
                     <div style={{ background:'rgba(255,255,255,0.15)', borderRadius:'10px', padding:'12px' }}>
                       <div style={{ fontSize:'11px', opacity:0.7, marginBottom:'4px', textTransform:'uppercase', letterSpacing:'0.5px' }}>Blood Group</div>
-                      <div style={{ fontSize:'20px', fontWeight:'800' }}>{form.blood_group || '—'}</div>
+                      <div style={{ fontSize:'20px', fontWeight:'800' }}>{form.blood_group || 'â€”'}</div>
                     </div>
                     <div style={{ background:'rgba(255,255,255,0.15)', borderRadius:'10px', padding:'12px' }}>
                       <div style={{ fontSize:'11px', opacity:0.7, marginBottom:'4px', textTransform:'uppercase', letterSpacing:'0.5px' }}>Appointments</div>
@@ -110,7 +110,7 @@ function HealthCard() {
 
               {form.allergies && (
                 <div style={{ background:'#FFEBEE', border:'1px solid #FFCDD2', borderRadius:'var(--radius-lg)', padding:'16px' }}>
-                  <div style={{ fontSize:'13px', fontWeight:'700', color:'#C62828', marginBottom:'6px' }}>⚠️ Allergies</div>
+                  <div style={{ fontSize:'13px', fontWeight:'700', color:'#C62828', marginBottom:'6px' }}>âš ï¸ Allergies</div>
                   <div style={{ fontSize:'13px', color:'#B71C1C' }}>{form.allergies}</div>
                 </div>
               )}
@@ -121,7 +121,7 @@ function HealthCard() {
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'20px' }}>
                   <h2 style={{ fontFamily:'var(--font-heading)', fontSize:'20px', color:'var(--color-primary)' }}>Health Information</h2>
                   <button className="btn-outline" onClick={() => setEditing(!editing)} style={{ padding:'8px 18px', fontSize:'13px' }}>
-                    {editing ? 'Cancel' : '✏️ Edit'}
+                    {editing ? 'Cancel' : 'âœï¸ Edit'}
                   </button>
                 </div>
 
@@ -131,7 +131,7 @@ function HealthCard() {
                       { label:'Blood Group',       value: form.blood_group },
                       { label:'Height',            value: form.height ? `${form.height} cm` : null },
                       { label:'Weight',            value: form.weight ? `${form.weight} kg` : null },
-                      { label:'BMI',               value: bmi ? `${bmi} — ${bmiStatus?.label}` : null },
+                      { label:'BMI',               value: bmi ? `${bmi} â€” ${bmiStatus?.label}` : null },
                       { label:'Allergies',         value: form.allergies },
                       { label:'Medical Conditions',value: form.conditions },
                     ].map(item => (
@@ -144,7 +144,7 @@ function HealthCard() {
                     ))}
                     {!data.healthRecord && (
                       <div style={{ background:'#FFF3E0', border:'1px solid #FFB74D', borderRadius:'var(--radius-md)', padding:'14px', fontSize:'13px', color:'#E65100', marginTop:'8px' }}>
-                        📝 Your health record is empty. Click Edit to fill in your details.
+                        ðŸ“ Your health record is empty. Click Edit to fill in your details.
                       </div>
                     )}
                   </div>
@@ -170,7 +170,7 @@ function HealthCard() {
                       </div>
                       <div>
                         <label style={{ display:'block', fontSize:'12px', fontWeight:'700', color:'var(--color-text-primary)', marginBottom:'6px', textTransform:'uppercase', letterSpacing:'0.5px' }}>BMI (auto)</label>
-                        <input className="input" value={bmi ? `${bmi} — ${bmiStatus?.label}` : 'Enter height & weight'} readOnly style={{ background:'var(--color-surface-alt)', color: bmiStatus?.color || 'var(--color-text-muted)' }} />
+                        <input className="input" value={bmi ? `${bmi} â€” ${bmiStatus?.label}` : 'Enter height & weight'} readOnly style={{ background:'var(--color-surface-alt)', color: bmiStatus?.color || 'var(--color-text-muted)' }} />
                       </div>
                       <div style={{ gridColumn:'1/-1' }}>
                         <label style={{ display:'block', fontSize:'12px', fontWeight:'700', color:'var(--color-text-primary)', marginBottom:'6px', textTransform:'uppercase', letterSpacing:'0.5px' }}>Allergies</label>

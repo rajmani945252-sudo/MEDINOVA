@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import { demoAppointmentRequests, getPatientRecordByAppointmentId } from '../../utils/demoData'
 import {
   clearVideoCallSession,
@@ -9,7 +10,6 @@ import {
   subscribeToVideoCallSession,
 } from '../../utils/videoCallSession'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 const panel = { background: '#FFFFFF', border: '1px solid rgba(0,105,92,0.08)', borderRadius: '24px', boxShadow: 'var(--shadow-card)' }
 
 const initials = (name) => String(name || 'P').split(' ').filter(Boolean).map((word) => word[0]).join('').slice(0, 2).toUpperCase()

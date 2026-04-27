@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import {
   PortalCard,
   PortalEmptyState,
@@ -11,7 +12,6 @@ import {
 import { mrSidebarItems } from '../../components/portal/moduleConfig'
 import { demoDoctors, filterDoctorsDirectory } from '../../utils/demoData'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 export default function MRFindDoctor() {
   const user = JSON.parse(localStorage.getItem('user') || '{}')

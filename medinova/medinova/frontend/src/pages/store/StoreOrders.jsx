@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import {
   PortalCard,
   PortalEmptyState,
@@ -28,7 +29,7 @@ function StoreOrders() {
   const h = { headers: { Authorization: `Bearer ${token}` } }
 
   const fetchOrders = () => {
-    axios.get('http://localhost:5000/api/store/orders', h)
+    axios.get(`${API_BASE_URL}/api/store/orders`, h)
       .then((res) => { setOrders(res.data); setLoading(false) })
       .catch(() => { setOrders([]); setLoading(false) })
   }
@@ -37,7 +38,7 @@ function StoreOrders() {
 
   const updateStatus = async (id, status) => {
     try {
-      await axios.put(`http://localhost:5000/api/store/orders/${id}/status`, { status }, h)
+      await axios.put(`${API_BASE_URL}/api/store/orders/${id}/status`, { status }, h)
       fetchOrders()
     } catch {}
   }

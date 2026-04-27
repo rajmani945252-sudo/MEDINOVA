@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import {
   PortalCard,
   PortalEmptyState,
@@ -30,7 +31,7 @@ function AdminUsers() {
   const h = { headers: { Authorization: `Bearer ${token}` } }
 
   const fetchUsers = () => {
-    axios.get('http://localhost:5000/api/admin/users', h)
+    axios.get(`${API_BASE_URL}/api/admin/users`, h)
       .then((res) => { setUsers(res.data); setLoading(false) })
       .catch(() => { setUsers([]); setLoading(false) })
   }
@@ -40,14 +41,14 @@ function AdminUsers() {
   const handleDelete = async (id, name) => {
     if (!window.confirm(`Delete user ${name}? This cannot be undone.`)) return
     try {
-      await axios.delete(`http://localhost:5000/api/admin/users/${id}`, h)
+      await axios.delete(`${API_BASE_URL}/api/admin/users/${id}`, h)
       fetchUsers()
     } catch {}
   }
 
   const handleVerify = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/admin/users/${id}/verify`, {}, h)
+      await axios.put(`${API_BASE_URL}/api/admin/users/${id}/verify`, {}, h)
       fetchUsers()
     } catch {}
   }

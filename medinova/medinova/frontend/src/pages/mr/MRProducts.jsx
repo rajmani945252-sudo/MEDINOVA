@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import {
   PortalCard,
   PortalEmptyState,
@@ -12,7 +13,6 @@ import {
 } from '../../components/portal/PortalChrome'
 import { mrSidebarItems } from '../../components/portal/moduleConfig'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 function MRProducts() {
   const user = JSON.parse(localStorage.getItem('user') || '{}')

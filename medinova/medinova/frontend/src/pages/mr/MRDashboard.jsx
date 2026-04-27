@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import {
   PortalActionTile,
   PortalCard,
@@ -78,8 +79,8 @@ export default function MRDashboard() {
     }
 
     Promise.allSettled([
-      axios.get('http://localhost:5000/api/mr/products', h),
-      axios.get('http://localhost:5000/api/mr/meetings', h),
+      axios.get(`${API_BASE_URL}/api/mr/products`, h),
+      axios.get(`${API_BASE_URL}/api/mr/meetings`, h),
     ]).then(([productsResult, meetingsResult]) => {
       if (productsResult.status === 'fulfilled') {
         setProducts(Array.isArray(productsResult.value.data) ? productsResult.value.data : [])

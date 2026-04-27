@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 const G = {
   900: '#072E25', 800: '#0D5C4A', 700: '#0F7A62', 600: '#118A6F',
@@ -17,7 +17,7 @@ const statusConfig = {
   rejected:  { bg: '#FEF2F2', color: '#991B1B', border: '#FECACA', dot: '#DC2626', label: 'Rejected'  },
 }
 
-/* ── Pending Modal ─────────────────────────────────────────── */
+/* â”€â”€ Pending Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function PendingModal({ pending, onClose }) {
   return (
     <div onClick={onClose} style={{ position:'fixed', inset:0, zIndex:999, background:'rgba(7,46,37,0.45)', backdropFilter:'blur(4px)', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px' }}>
@@ -28,7 +28,7 @@ function PendingModal({ pending, onClose }) {
             <h2 style={{ fontSize:'20px', fontWeight:700, margin:0, color:G[900] }}>Pending Appointments</h2>
             <p style={{ fontSize:'13px', color:G[700], marginTop:'4px', marginBottom:0 }}>{pending.length} request{pending.length !== 1 ? 's' : ''} waiting for review</p>
           </div>
-          <button onClick={onClose} style={{ border:'none', background:`rgba(13,92,74,0.10)`, borderRadius:'10px', width:'34px', height:'34px', cursor:'pointer', fontSize:'20px', color:G[800], display:'grid', placeItems:'center', flexShrink:0, lineHeight:1 }}>×</button>
+          <button onClick={onClose} style={{ border:'none', background:`rgba(13,92,74,0.10)`, borderRadius:'10px', width:'34px', height:'34px', cursor:'pointer', fontSize:'20px', color:G[800], display:'grid', placeItems:'center', flexShrink:0, lineHeight:1 }}>Ã—</button>
         </div>
         <div style={{ overflowY:'auto', padding:'16px 24px', flex:1 }}>
           {pending.length === 0
@@ -36,10 +36,10 @@ function PendingModal({ pending, onClose }) {
             : <div style={{ display:'flex', flexDirection:'column', gap:'9px' }}>
                 {pending.map(apt => (
                   <div key={apt.id} style={{ borderRadius:'14px', border:'1px solid #FED7AA', padding:'13px 15px', background:'#FFFBF5', display:'grid', gridTemplateColumns:'auto minmax(0,1fr) auto', gap:'11px', alignItems:'center' }}>
-                    <div style={{ width:'36px', height:'36px', borderRadius:'10px', background:'#FEF9C3', display:'grid', placeItems:'center', fontSize:'15px' }}>👤</div>
+                    <div style={{ width:'36px', height:'36px', borderRadius:'10px', background:'#FEF9C3', display:'grid', placeItems:'center', fontSize:'15px' }}>ðŸ‘¤</div>
                     <div>
                       <div style={{ fontSize:'14px', fontWeight:700, color:'#0F172A', marginBottom:'2px' }}>{apt.patient_name}</div>
-                      <div style={{ fontSize:'12px', color:'#92400E' }}>{apt.date} · {apt.time_slot}</div>
+                      <div style={{ fontSize:'12px', color:'#92400E' }}>{apt.date} Â· {apt.time_slot}</div>
                     </div>
                     <div style={{ background:'#FFF7ED', color:'#C2410C', borderRadius:'999px', padding:'4px 10px', fontSize:'11px', fontWeight:700, whiteSpace:'nowrap' }}>Pending</div>
                   </div>
@@ -50,7 +50,7 @@ function PendingModal({ pending, onClose }) {
         <div style={{ padding:'14px 24px', borderTop:`1px solid ${G[100]}`, flexShrink:0 }}>
           <Link to="/doctor/appointments" style={{ textDecoration:'none' }} onClick={onClose}>
             <button style={{ width:'100%', padding:'12px', borderRadius:'12px', border:'none', background:G[800], color:'#FFFFFF', fontWeight:700, fontSize:'14px', cursor:'pointer' }}>
-              Manage All Appointments →
+              Manage All Appointments â†’
             </button>
           </Link>
         </div>
@@ -59,7 +59,7 @@ function PendingModal({ pending, onClose }) {
   )
 }
 
-/* ── Doctor Dashboard ──────────────────────────────────────── */
+/* â”€â”€ Doctor Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 export default function DoctorDashboard() {
   const user     = JSON.parse(localStorage.getItem('user') || '{}')
   const token    = localStorage.getItem('token')
@@ -122,7 +122,7 @@ export default function DoctorDashboard() {
     >
       <div className="page-content" style={{ maxWidth:'1280px', margin:'0 auto', padding:'24px 20px' }}>
 
-        {/* ── Banner ───────────────────────────────────── */}
+        {/* â”€â”€ Banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div style={{ borderRadius:'24px', marginBottom:'20px', overflow:'hidden', boxShadow:`0 8px 32px rgba(13,92,74,0.18)` }}>
           <div style={{ background:`linear-gradient(135deg, ${G[900]} 0%, ${G[800]} 55%, ${G[700]} 100%)`, padding:'30px 34px', position:'relative' }}>
             <div style={{ position:'absolute', top:'-50px', right:'180px', width:'220px', height:'220px', borderRadius:'50%', background:'rgba(168,230,216,0.08)', pointerEvents:'none' }} />
@@ -132,7 +132,7 @@ export default function DoctorDashboard() {
                 <div style={{ fontSize:'11px', letterSpacing:'0.12em', textTransform:'uppercase', color:G[200], fontWeight:700, marginBottom:'7px' }}>{greeting}, Doctor</div>
                 <h1 style={{ fontSize:'34px', fontWeight:700, color:'#FFFFFF', lineHeight:1.1, marginBottom:'9px' }}>Dr. {user.name || 'Doctor'}</h1>
                 <p style={{ fontSize:'14px', color:G[100], lineHeight:1.7, maxWidth:'500px', marginBottom:'20px' }}>
-                  {user.specialization || 'Specialist'} · MediNova Clinic — manage appointments, patient records, availability and MR meetings from one place.
+                  {user.specialization || 'Specialist'} Â· MediNova Clinic â€” manage appointments, patient records, availability and MR meetings from one place.
                 </p>
                 <div style={{ display:'flex', gap:'9px', flexWrap:'wrap' }}>
                   {[
@@ -144,7 +144,7 @@ export default function DoctorDashboard() {
                     { label:'MR Pending',  value: pendingMR,       color: '#FEF08A'   },
                   ].map(chip => (
                     <div key={chip.label} style={{ background:'rgba(255,255,255,0.10)', border:'1px solid rgba(255,255,255,0.16)', borderRadius:'12px', padding:'7px 14px', display:'flex', alignItems:'center', gap:'8px' }}>
-                      <span style={{ fontSize:'19px', fontWeight:700, color:chip.color, lineHeight:1 }}>{loading ? '—' : chip.value}</span>
+                      <span style={{ fontSize:'19px', fontWeight:700, color:chip.color, lineHeight:1 }}>{loading ? 'â€”' : chip.value}</span>
                       <span style={{ fontSize:'10px', fontWeight:700, color:chip.color, opacity:0.85, textTransform:'uppercase', letterSpacing:'0.07em' }}>{chip.label}</span>
                     </div>
                   ))}
@@ -154,16 +154,16 @@ export default function DoctorDashboard() {
                 <div style={{ width:'72px', height:'72px', borderRadius:'20px', background:'rgba(255,255,255,0.13)', border:'1.5px solid rgba(255,255,255,0.20)', display:'grid', placeItems:'center', fontSize:'26px', fontWeight:700, color:'#FFFFFF' }}>
                   {user.name?.charAt(0)?.toUpperCase() || 'D'}
                 </div>
-                <div style={{ background:'rgba(168,230,216,0.18)', border:`1px solid rgba(168,230,216,0.32)`, borderRadius:'999px', padding:'3px 11px', fontSize:'10px', fontWeight:700, color:G[100], letterSpacing:'0.06em' }}>● ONLINE</div>
+                <div style={{ background:'rgba(168,230,216,0.18)', border:`1px solid rgba(168,230,216,0.32)`, borderRadius:'999px', padding:'3px 11px', fontSize:'10px', fontWeight:700, color:G[100], letterSpacing:'0.06em' }}>â— ONLINE</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── 3-column grid ────────────────────────────── */}
+        {/* â”€â”€ 3-column grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div className="doctor-main-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'16px', alignItems:'stretch' }}>
 
-          {/* ══════════════ COL 1 ══════════════ */}
+          {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â• COL 1 â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
           <div style={{ display:'flex', flexDirection:'column', gap:'14px' }}>
 
             {/* Pending appointments card */}
@@ -180,28 +180,28 @@ export default function DoctorDashboard() {
                   <div style={{ fontSize:'10px', textTransform:'uppercase', letterSpacing:'0.09em', color:'#C2410C', fontWeight:700, marginBottom:'3px' }}>Action Required</div>
                   <div style={{ fontSize:'16px', fontWeight:700, color:G[900] }}>Pending Requests</div>
                 </div>
-                <div style={{ width:'34px', height:'34px', borderRadius:'10px', background:'#FFF7ED', border:'1px solid #FED7AA', display:'grid', placeItems:'center', fontSize:'18px', color:'#C2410C', flexShrink:0 }}>›</div>
+                <div style={{ width:'34px', height:'34px', borderRadius:'10px', background:'#FFF7ED', border:'1px solid #FED7AA', display:'grid', placeItems:'center', fontSize:'18px', color:'#C2410C', flexShrink:0 }}>â€º</div>
               </div>
               {loading
-                ? <div style={{ fontSize:'13px', color:'#94A3B8' }}>Loading…</div>
+                ? <div style={{ fontSize:'13px', color:'#94A3B8' }}>Loadingâ€¦</div>
                 : pending.length > 0
                   ? <div style={{ display:'flex', flexDirection:'column', gap:'7px' }}>
                       {pending.slice(0, 2).map(apt => (
                         <div key={apt.id} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', gap:'8px', padding:'9px 11px', borderRadius:'10px', background:'#FFFBF5', border:'1px solid #FDE8C8' }}>
                           <div style={{ minWidth:0 }}>
                             <div style={{ fontSize:'13px', fontWeight:700, color:'#0F172A', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{apt.patient_name}</div>
-                            <div style={{ fontSize:'11px', color:'#92400E' }}>{apt.date} · {apt.time_slot}</div>
+                            <div style={{ fontSize:'11px', color:'#92400E' }}>{apt.date} Â· {apt.time_slot}</div>
                           </div>
                           <div style={{ background:'#FFF7ED', color:'#C2410C', borderRadius:'999px', padding:'3px 9px', fontSize:'10px', fontWeight:700, whiteSpace:'nowrap', flexShrink:0 }}>Pending</div>
                         </div>
                       ))}
-                      {pending.length > 2 && <div style={{ fontSize:'12px', color:'#C2410C', fontWeight:700, textAlign:'center', paddingTop:'2px' }}>+{pending.length - 2} more — click to review</div>}
+                      {pending.length > 2 && <div style={{ fontSize:'12px', color:'#C2410C', fontWeight:700, textAlign:'center', paddingTop:'2px' }}>+{pending.length - 2} more â€” click to review</div>}
                     </div>
                   : <div style={{ fontSize:'13px', color:'#94A3B8', padding:'4px 0' }}>No pending requests right now.</div>
               }
             </div>
 
-            {/* ── Availability snapshot card (NEW) ── */}
+            {/* â”€â”€ Availability snapshot card (NEW) â”€â”€ */}
             <div style={{ background:`linear-gradient(135deg, ${G[50]} 0%, ${G[100]} 100%)`, borderRadius:'18px', border:`1px solid ${G[200]}`, padding:'18px 20px', boxShadow:`0 2px 10px rgba(13,92,74,0.07)` }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'10px' }}>
                 <div>
@@ -209,13 +209,13 @@ export default function DoctorDashboard() {
                   <div style={{ fontSize:'16px', fontWeight:700, color:G[900] }}>Availability</div>
                 </div>
                 <Link to="/doctor/availability" style={{ textDecoration:'none' }}>
-                  <div style={{ width:'30px', height:'30px', borderRadius:'9px', background:'rgba(255,255,255,0.6)', border:`1px solid ${G[200]}`, display:'grid', placeItems:'center', fontSize:'14px', color:G[800], cursor:'pointer' }}>›</div>
+                  <div style={{ width:'30px', height:'30px', borderRadius:'9px', background:'rgba(255,255,255,0.6)', border:`1px solid ${G[200]}`, display:'grid', placeItems:'center', fontSize:'14px', color:G[800], cursor:'pointer' }}>â€º</div>
                 </Link>
               </div>
               <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:'9px', marginBottom:'12px' }}>
                 {[
-                  { label:'Active Days',  value: loading ? '—' : activeDays,  color:G[800], bg:'#FFFFFF'  },
-                  { label:'Total Slots',  value: loading ? '—' : totalSlots,  color:G[700], bg:G[25]     },
+                  { label:'Active Days',  value: loading ? 'â€”' : activeDays,  color:G[800], bg:'#FFFFFF'  },
+                  { label:'Total Slots',  value: loading ? 'â€”' : totalSlots,  color:G[700], bg:G[25]     },
                 ].map(s => (
                   <div key={s.label} style={{ background:s.bg, borderRadius:'12px', padding:'12px 13px', border:`1px solid ${G[100]}` }}>
                     <div style={{ fontSize:'22px', fontWeight:700, color:s.color, lineHeight:1, marginBottom:'3px' }}>{s.value}</div>
@@ -237,7 +237,7 @@ export default function DoctorDashboard() {
               </div>
               <Link to="/doctor/availability" style={{ textDecoration:'none' }}>
                 <button style={{ width:'100%', marginTop:'11px', padding:'9px', borderRadius:'11px', border:`1px solid ${G[200]}`, background:'rgba(255,255,255,0.70)', color:G[800], fontWeight:700, fontSize:'12px', cursor:'pointer' }}>
-                  Manage Schedule →
+                  Manage Schedule â†’
                 </button>
               </Link>
             </div>
@@ -258,13 +258,13 @@ export default function DoctorDashboard() {
               </div>
               <Link to="/doctor/profile" style={{ textDecoration:'none' }}>
                 <button style={{ width:'100%', padding:'10px', borderRadius:'11px', border:`1px solid ${G[200]}`, background:G[50], color:G[800], fontWeight:700, fontSize:'13px', cursor:'pointer' }}>
-                  Edit Profile →
+                  Edit Profile â†’
                 </button>
               </Link>
             </div>
           </div>
 
-          {/* ══════════════ COL 2 ══════════════ */}
+          {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â• COL 2 â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
           <div style={{ display:'flex', flexDirection:'column', gap:'14px' }}>
 
             {/* Appointment stats */}
@@ -279,14 +279,14 @@ export default function DoctorDashboard() {
                   { label:'Completed', value:stats.completed, color:G[600],    bg:G[25],      border:G[100]    },
                 ].map(s => (
                   <div key={s.label} style={{ background:s.bg, borderRadius:'14px', padding:'16px', border:`1px solid ${s.border}` }}>
-                    <div style={{ fontSize:'28px', fontWeight:700, color:s.color, lineHeight:1, marginBottom:'5px' }}>{loading ? '—' : s.value}</div>
+                    <div style={{ fontSize:'28px', fontWeight:700, color:s.color, lineHeight:1, marginBottom:'5px' }}>{loading ? 'â€”' : s.value}</div>
                     <div style={{ fontSize:'11px', fontWeight:700, color:s.color, opacity:0.75, textTransform:'uppercase', letterSpacing:'0.06em' }}>{s.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* ── MR Meetings snapshot card (UPDATED) ── */}
+            {/* â”€â”€ MR Meetings snapshot card (UPDATED) â”€â”€ */}
             <div style={{ background:`linear-gradient(135deg, ${G[25]} 0%, ${G[50]} 100%)`, borderRadius:'18px', border:`1px solid ${G[200]}`, padding:'20px 22px', boxShadow:`0 2px 10px rgba(13,92,74,0.07)` }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'12px' }}>
                 <div>
@@ -308,28 +308,28 @@ export default function DoctorDashboard() {
                   { label:'Done',     value: mrMeetings.filter(m=>m.status==='completed').length,  color:G[600], bg:G[25]     },
                 ].map(s => (
                   <div key={s.label} style={{ background:s.bg, borderRadius:'11px', padding:'10px 12px', border:`1px solid ${G[100]}` }}>
-                    <div style={{ fontSize:'20px', fontWeight:700, color:s.color, lineHeight:1, marginBottom:'2px' }}>{loading ? '—' : s.value}</div>
+                    <div style={{ fontSize:'20px', fontWeight:700, color:s.color, lineHeight:1, marginBottom:'2px' }}>{loading ? 'â€”' : s.value}</div>
                     <div style={{ fontSize:'10px', fontWeight:700, color:s.color, opacity:0.75, textTransform:'uppercase', letterSpacing:'0.06em' }}>{s.label}</div>
                   </div>
                 ))}
               </div>
               <Link to="/doctor/mr-meetings" style={{ textDecoration:'none' }}>
                 <button style={{ width:'100%', padding:'10px', borderRadius:'12px', border:`1px solid ${G[200]}`, background:'rgba(255,255,255,0.70)', color:G[800], fontWeight:700, fontSize:'12px', cursor:'pointer' }}>
-                  Open MR Meetings →
+                  Open MR Meetings â†’
                 </button>
               </Link>
             </div>
 
-            {/* ── Quick links (UPDATED with new pages) ── */}
+            {/* â”€â”€ Quick links (UPDATED with new pages) â”€â”€ */}
             <div style={{ background:'#FFFFFF', borderRadius:'18px', border:`1px solid ${G[100]}`, padding:'18px 20px', boxShadow:`0 2px 10px rgba(13,92,74,0.05)`, flex:1, display:'flex', flexDirection:'column', gap:'8px' }}>
               <div style={{ fontSize:'10px', textTransform:'uppercase', letterSpacing:'0.09em', color:'#94A3B8', fontWeight:700, marginBottom:'4px' }}>Quick Links</div>
               {[
-               { to:'/doctor/appointments',        icon:'📅', label:'Patient Appointments',  color:G[800], bg:G[50],  border:G[200] },
-{ to:'/doctor/availability',        icon:'🗓️', label:'Manage Availability',   color:G[700], bg:G[25],  border:G[100] },
-{ to:'/doctor/mr-meetings',         icon:'💊', label:'MR Meetings',           color:G[600], bg:G[50],  border:G[200] },
-{ to:'/doctor/video-consultation',  icon:'📹', label:'Video Consultation',    color:G[700], bg:G[25],  border:G[100] },
-{ to:'/doctor/patient-report-analysis', icon:'🔬', label:'Report Analysis',   color:G[800], bg:G[50],  border:G[200] },
-{ to:'/doctor/profile',             icon:'👤', label:'My Profile',            color:G[800], bg:G[25],  border:G[100] },
+               { to:'/doctor/appointments',        icon:'ðŸ“…', label:'Patient Appointments',  color:G[800], bg:G[50],  border:G[200] },
+{ to:'/doctor/availability',        icon:'ðŸ—“ï¸', label:'Manage Availability',   color:G[700], bg:G[25],  border:G[100] },
+{ to:'/doctor/mr-meetings',         icon:'ðŸ’Š', label:'MR Meetings',           color:G[600], bg:G[50],  border:G[200] },
+{ to:'/doctor/video-consultation',  icon:'ðŸ“¹', label:'Video Consultation',    color:G[700], bg:G[25],  border:G[100] },
+{ to:'/doctor/patient-report-analysis', icon:'ðŸ”¬', label:'Report Analysis',   color:G[800], bg:G[50],  border:G[200] },
+{ to:'/doctor/profile',             icon:'ðŸ‘¤', label:'My Profile',            color:G[800], bg:G[25],  border:G[100] },
               ].map(item => (
                 <Link key={item.to} to={item.to} style={{ textDecoration:'none' }}>
                   <div
@@ -341,14 +341,14 @@ export default function DoctorDashboard() {
                       <span style={{ fontSize:'14px' }}>{item.icon}</span>
                       <span style={{ fontSize:'13px', fontWeight:700, color:item.color }}>{item.label}</span>
                     </div>
-                    <span style={{ fontSize:'18px', color:item.color, lineHeight:1 }}>›</span>
+                    <span style={{ fontSize:'18px', color:item.color, lineHeight:1 }}>â€º</span>
                   </div>
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* ══════════════ COL 3 ══════════════ */}
+          {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â• COL 3 â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
           <div style={{ display:'flex', flexDirection:'column', gap:'14px' }}>
 
             {/* Recent appointments with prescription shortcut */}
@@ -362,7 +362,7 @@ export default function DoctorDashboard() {
               </div>
               <div style={{ flex:1, display:'flex', flexDirection:'column', gap:'7px' }}>
                 {loading
-                  ? <div style={{ fontSize:'13px', color:'#94A3B8', padding:'8px 0' }}>Loading…</div>
+                  ? <div style={{ fontSize:'13px', color:'#94A3B8', padding:'8px 0' }}>Loadingâ€¦</div>
                   : recent.length > 0
                     ? recent.map(apt => {
                         const s           = statusConfig[apt.status] || statusConfig.pending
@@ -372,7 +372,7 @@ export default function DoctorDashboard() {
                             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', gap:'8px', padding:'10px 13px' }}>
                               <div style={{ minWidth:0 }}>
                                 <div style={{ fontSize:'13px', fontWeight:700, color:G[900], marginBottom:'1px', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{apt.patient_name}</div>
-                                <div style={{ fontSize:'11px', color:'#94A3B8' }}>{apt.date} · {apt.time_slot}</div>
+                                <div style={{ fontSize:'11px', color:'#94A3B8' }}>{apt.date} Â· {apt.time_slot}</div>
                               </div>
                               <div style={{ display:'flex', alignItems:'center', gap:'6px', flexShrink:0 }}>
                                 <div style={{ background:s.bg, color:s.color, borderRadius:'999px', padding:'3px 9px', fontSize:'10px', fontWeight:700, whiteSpace:'nowrap', border:`1px solid ${s.border}`, display:'flex', alignItems:'center', gap:'4px' }}>
@@ -390,7 +390,7 @@ export default function DoctorDashboard() {
                                   onMouseEnter={e => e.currentTarget.style.background=G[100]}
                                   onMouseLeave={e => e.currentTarget.style.background=G[50]}
                                 >
-                                  <span style={{ fontSize:'11px' }}>📝</span>
+                                  <span style={{ fontSize:'11px' }}>ðŸ“</span>
                                   <span style={{ fontSize:'11px', fontWeight:700, color:G[800] }}>Prescribe</span>
                                 </div>
                                 <Link to={`/doctor/patient/${apt.patient_id}/history`} style={{ textDecoration:'none' }}>
@@ -399,7 +399,7 @@ export default function DoctorDashboard() {
                                     onMouseEnter={e => e.currentTarget.style.background=G[100]}
                                     onMouseLeave={e => e.currentTarget.style.background=G[50]}
                                   >
-                                    <span style={{ fontSize:'11px' }}>📋</span>
+                                    <span style={{ fontSize:'11px' }}>ðŸ“‹</span>
                                     <span style={{ fontSize:'11px', fontWeight:700, color:G[800] }}>History</span>
                                   </div>
                                 </Link>
@@ -412,9 +412,9 @@ export default function DoctorDashboard() {
                                   onMouseEnter={e => e.currentTarget.style.background=G[100]}
                                   onMouseLeave={e => e.currentTarget.style.background=G[25]}
                                 >
-                                  <span style={{ fontSize:'11px' }}>📋</span>
+                                  <span style={{ fontSize:'11px' }}>ðŸ“‹</span>
                                   <span style={{ fontSize:'11px', fontWeight:700, color:G[700] }}>View Medical History</span>
-                                  <span style={{ fontSize:'14px', color:G[600], marginLeft:'auto', lineHeight:1 }}>›</span>
+                                  <span style={{ fontSize:'14px', color:G[600], marginLeft:'auto', lineHeight:1 }}>â€º</span>
                                 </div>
                               </Link>
                             )}
@@ -426,28 +426,28 @@ export default function DoctorDashboard() {
               </div>
             </div>
 
-            {/* ── Tip card (UPDATED) ── */}
+            {/* â”€â”€ Tip card (UPDATED) â”€â”€ */}
             <div style={{ background:`linear-gradient(135deg, ${G[25]} 0%, ${G[50]} 100%)`, borderRadius:'18px', border:`1px solid ${G[200]}`, padding:'18px 20px', boxShadow:`0 2px 10px rgba(13,92,74,0.07)` }}>
               <div style={{ fontSize:'10px', textTransform:'uppercase', letterSpacing:'0.09em', color:G[700], fontWeight:700, marginBottom:'6px' }}>Tip</div>
               <div style={{ fontSize:'15px', fontWeight:700, color:G[900], marginBottom:'8px' }}>Access patient history fast</div>
               <p style={{ fontSize:'12px', color:G[800], lineHeight:1.8, margin:'0 0 10px' }}>
-                Click <strong>History</strong> on any confirmed appointment to view prescriptions, past visits and uploaded reports — all in one place.
+                Click <strong>History</strong> on any confirmed appointment to view prescriptions, past visits and uploaded reports â€” all in one place.
               </p>
               <div style={{ display:'flex', gap:'8px' }}>
                 <Link to="/doctor/appointments" style={{ textDecoration:'none', flex:1 }}>
                   <button style={{ width:'100%', padding:'8px', borderRadius:'10px', border:`1px solid ${G[200]}`, background:'rgba(255,255,255,0.70)', color:G[800], fontWeight:700, fontSize:'11px', cursor:'pointer' }}>
-                    Appointments →
+                    Appointments â†’
                   </button>
                 </Link>
                 <Link to="/doctor/availability" style={{ textDecoration:'none', flex:1 }}>
                   <button style={{ width:'100%', padding:'8px', borderRadius:'10px', border:`1px solid ${G[200]}`, background:'rgba(255,255,255,0.70)', color:G[800], fontWeight:700, fontSize:'11px', cursor:'pointer' }}>
-                    Availability →
+                    Availability â†’
                   </button>
                 </Link>
               </div>
             </div>
 
-            {/* ── CTA ── */}
+            {/* â”€â”€ CTA â”€â”€ */}
             <div
               style={{ background:`linear-gradient(135deg, ${G[900]} 0%, ${G[800]} 100%)`, borderRadius:'18px', padding:'17px 19px', boxShadow:`0 8px 22px rgba(13,92,74,0.24)`, cursor:'pointer', position:'relative', overflow:'hidden' }}
               onClick={() => navigate('/doctor/appointments')}
@@ -455,13 +455,13 @@ export default function DoctorDashboard() {
               <div style={{ position:'absolute', top:'-18px', right:'-18px', width:'90px', height:'90px', borderRadius:'50%', background:'rgba(255,255,255,0.06)', pointerEvents:'none' }} />
               <div style={{ fontSize:'10px', textTransform:'uppercase', letterSpacing:'0.09em', color:G[200], fontWeight:700, marginBottom:'5px', position:'relative' }}>Quick Access</div>
               <div style={{ fontSize:'15px', fontWeight:700, color:'#FFFFFF', marginBottom:'3px', position:'relative' }}>Go to Appointments Panel</div>
-              <div style={{ fontSize:'12px', color:G[100], position:'relative', marginBottom:'13px' }}>Confirm, reject and write prescriptions →</div>
+              <div style={{ fontSize:'12px', color:G[100], position:'relative', marginBottom:'13px' }}>Confirm, reject and write prescriptions â†’</div>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px', position:'relative' }}>
                 {[
-                  { to:'/doctor/availability',            label:'⏰ Schedule'    },
-{ to:'/doctor/mr-meetings',             label:'💊 MR Meetings' },
-{ to:'/doctor/video-consultation',      label:'📹 Video Call'  },
-{ to:'/doctor/patient-report-analysis', label:'🔬 Reports'     },
+                  { to:'/doctor/availability',            label:'â° Schedule'    },
+{ to:'/doctor/mr-meetings',             label:'ðŸ’Š MR Meetings' },
+{ to:'/doctor/video-consultation',      label:'ðŸ“¹ Video Call'  },
+{ to:'/doctor/patient-report-analysis', label:'ðŸ”¬ Reports'     },
                 ].map(btn => (
                   <Link key={btn.to} to={btn.to} onClick={e => e.stopPropagation()} style={{ textDecoration:'none' }}>
                     <div style={{ padding:'8px 10px', borderRadius:'10px', background:'rgba(255,255,255,0.10)', border:'1px solid rgba(255,255,255,0.16)', textAlign:'center', fontSize:'12px', fontWeight:700, color:G[100], cursor:'pointer', transition:'background 0.15s' }}

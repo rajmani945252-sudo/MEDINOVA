@@ -1,19 +1,34 @@
 const jwt = require('jsonwebtoken');
 
 const protect = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.startsWith('Bearer ')
+    ? authHeader.split(' ')[1]
+    : req.headers['x-auth-token'];
 
   if (!token) {
     return res.status(401).json({ message: 'Not logged in' });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'medinova-dev-secret');
     req.user = decoded;
-    next();
+    return next();
   } catch {
-    res.status(401).json({ message: 'Invalid or expired token' });
+    return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };
 
-module.exports = { protect };
+const authorize = (...roles) => (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
+
+  if (roles.length > 0 && !roles.includes(req.user.role)) {
+    return res.status(403).json({ message: 'You are not allowed to access this resource' });
+  }
+
+  return next();
+};
+
+module.exports = { protect, authorize };

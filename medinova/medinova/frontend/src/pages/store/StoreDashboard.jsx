@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import {
   PortalActionTile,
   PortalCard,
@@ -33,8 +34,8 @@ function StoreDashboard() {
     const h = { headers: { Authorization: `Bearer ${token}` } }
 
     Promise.allSettled([
-      axios.get('http://localhost:5000/api/store/medicines', h),
-      axios.get('http://localhost:5000/api/store/orders', h),
+      axios.get(`${API_BASE_URL}/api/store/medicines`, h),
+      axios.get(`${API_BASE_URL}/api/store/orders`, h),
     ]).then(([medicinesResult, ordersResult]) => {
       if (medicinesResult.status === 'fulfilled') {
         const liveMedicines = Array.isArray(medicinesResult.value.data) ? medicinesResult.value.data : []

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 const G = {
   900:'#072E25',800:'#0D5C4A',700:'#0F7A62',600:'#118A6F',
@@ -17,10 +17,10 @@ function MedRow({ med, index, onChange, onRemove, canRemove }) {
     <div style={{ background:G[25], borderRadius:'14px', border:`1px solid ${G[100]}`, padding:'16px', position:'relative' }}>
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'12px' }}>
         <div style={{ fontSize:'11px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700] }}>
-          💊 Medicine #{index+1}
+          ðŸ’Š Medicine #{index+1}
         </div>
         {canRemove && (
-          <button onClick={() => onRemove(index)} style={{ width:'26px', height:'26px', borderRadius:'8px', border:'1px solid #FECACA', background:'#FEF2F2', color:'#DC2626', fontWeight:700, fontSize:'14px', cursor:'pointer', display:'grid', placeItems:'center', lineHeight:1 }}>×</button>
+          <button onClick={() => onRemove(index)} style={{ width:'26px', height:'26px', borderRadius:'8px', border:'1px solid #FECACA', background:'#FEF2F2', color:'#DC2626', fontWeight:700, fontSize:'14px', cursor:'pointer', display:'grid', placeItems:'center', lineHeight:1 }}>Ã—</button>
         )}
       </div>
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px' }} className="med-row-grid">
@@ -91,7 +91,7 @@ export default function WritePrescription() {
   if (submitted) return (
     <div style={{ background:`linear-gradient(160deg,${G[25]} 0%,${G[50]} 50%,#F0FDFA 100%)`, minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px' }}>
       <div style={{ background:'#fff', borderRadius:'24px', padding:'48px 40px', textAlign:'center', maxWidth:'440px', boxShadow:`0 16px 48px rgba(13,92,74,0.14)`, border:`1px solid ${G[100]}` }}>
-        <div style={{ width:'72px', height:'72px', borderRadius:'20px', background:G[50], border:`1px solid ${G[200]}`, display:'grid', placeItems:'center', fontSize:'30px', margin:'0 auto 18px' }}>✅</div>
+        <div style={{ width:'72px', height:'72px', borderRadius:'20px', background:G[50], border:`1px solid ${G[200]}`, display:'grid', placeItems:'center', fontSize:'30px', margin:'0 auto 18px' }}>âœ…</div>
         <h2 style={{ fontSize:'22px', fontWeight:700, color:G[900], marginBottom:'8px' }}>Prescription Sent!</h2>
         <p style={{ fontSize:'14px', color:'#64748B', lineHeight:1.7, marginBottom:'28px' }}>
           The prescription for <strong>{apt.patient_name || 'the patient'}</strong> has been submitted and will be visible in their medical records.
@@ -126,14 +126,14 @@ export default function WritePrescription() {
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:'14px', position:'relative' }}>
               <div>
                 <div style={{ fontSize:'11px', letterSpacing:'0.12em', textTransform:'uppercase', color:G[200], fontWeight:700, marginBottom:'5px' }}>Digital Prescription</div>
-                <h1 style={{ fontSize:'26px', fontWeight:700, color:'#fff', margin:'0 0 5px' }}>📝 Write Prescription</h1>
+                <h1 style={{ fontSize:'26px', fontWeight:700, color:'#fff', margin:'0 0 5px' }}>ðŸ“ Write Prescription</h1>
                 <p style={{ fontSize:'13px', color:G[100], margin:0 }}>
                   Patient: <strong style={{ color:'#fff' }}>{apt.patient_name || `Appointment #${id}`}</strong>
-                  {apt.date && <span> · {apt.date} {apt.time_slot}</span>}
+                  {apt.date && <span> Â· {apt.date} {apt.time_slot}</span>}
                 </p>
               </div>
               <button onClick={() => navigate(-1)} style={{ padding:'10px 18px', borderRadius:'12px', border:'1.5px solid rgba(168,230,216,0.3)', background:'rgba(255,255,255,0.09)', color:'#fff', fontWeight:700, fontSize:'13px', cursor:'pointer' }}>
-                ← Back
+                â† Back
               </button>
             </div>
           </div>
@@ -142,8 +142,8 @@ export default function WritePrescription() {
         {/* Doctor & Patient info */}
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px', marginBottom:'18px' }} className="rx-info-grid">
           {[
-            { title:'👨‍⚕️ Prescribing Doctor', lines:[ `Dr. ${doctor.name || 'Doctor'}`, doctor.specialization || 'Specialist', doctor.hospital || 'MediNova Clinic' ] },
-            { title:'👤 Patient Details',      lines:[ apt.patient_name || '—', `Date: ${apt.date || '—'}`, `Slot: ${apt.time_slot || '—'}` ] },
+            { title:'ðŸ‘¨â€âš•ï¸ Prescribing Doctor', lines:[ `Dr. ${doctor.name || 'Doctor'}`, doctor.specialization || 'Specialist', doctor.hospital || 'MediNova Clinic' ] },
+            { title:'ðŸ‘¤ Patient Details',      lines:[ apt.patient_name || 'â€”', `Date: ${apt.date || 'â€”'}`, `Slot: ${apt.time_slot || 'â€”'}` ] },
           ].map(card => (
             <div key={card.title} style={{ background:'#fff', borderRadius:'16px', border:`1px solid ${G[100]}`, padding:'18px 20px', boxShadow:`0 2px 8px rgba(13,92,74,0.05)` }}>
               <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700], marginBottom:'10px' }}>{card.title}</div>
@@ -156,16 +156,16 @@ export default function WritePrescription() {
 
         {/* Diagnosis */}
         <div style={{ background:'#fff', borderRadius:'18px', border:`1px solid ${G[100]}`, padding:'20px 22px', marginBottom:'14px', boxShadow:`0 2px 8px rgba(13,92,74,0.05)` }}>
-          <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700], marginBottom:'10px' }}>🩺 Diagnosis & Chief Complaint</div>
+          <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700], marginBottom:'10px' }}>ðŸ©º Diagnosis & Chief Complaint</div>
           <textarea value={diagnosis} onChange={e => setDiagnosis(e.target.value)} rows={3}
-            placeholder="Enter primary diagnosis, chief complaint, clinical findings…"
+            placeholder="Enter primary diagnosis, chief complaint, clinical findingsâ€¦"
             style={{ width:'100%', padding:'11px 14px', borderRadius:'11px', border:`1px solid ${G[100]}`, background:G[25], fontSize:'13px', color:G[900], outline:'none', resize:'vertical', fontFamily:'inherit', boxSizing:'border-box', lineHeight:1.6 }} />
         </div>
 
         {/* Medicines */}
         <div style={{ background:'#fff', borderRadius:'18px', border:`1px solid ${G[100]}`, padding:'20px 22px', marginBottom:'14px', boxShadow:`0 2px 8px rgba(13,92,74,0.05)` }}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'14px' }}>
-            <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700] }}>💊 Medicines Prescribed</div>
+            <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700] }}>ðŸ’Š Medicines Prescribed</div>
             <button onClick={addMed} style={{ padding:'7px 14px', borderRadius:'9px', border:`1px solid ${G[200]}`, background:G[50], color:G[800], fontWeight:700, fontSize:'12px', cursor:'pointer', display:'flex', alignItems:'center', gap:'5px' }}>
               + Add Medicine
             </button>
@@ -180,18 +180,18 @@ export default function WritePrescription() {
         {/* Tests & Follow-up */}
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px', marginBottom:'14px' }} className="rx-info-grid">
           <div style={{ background:'#fff', borderRadius:'18px', border:`1px solid ${G[100]}`, padding:'20px 22px', boxShadow:`0 2px 8px rgba(13,92,74,0.05)` }}>
-            <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700], marginBottom:'10px' }}>🔬 Tests Recommended</div>
+            <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700], marginBottom:'10px' }}>ðŸ”¬ Tests Recommended</div>
             <textarea value={tests} onChange={e => setTests(e.target.value)} rows={3}
-              placeholder="CBC, Blood sugar, X-Ray…"
+              placeholder="CBC, Blood sugar, X-Rayâ€¦"
               style={{ width:'100%', padding:'10px 13px', borderRadius:'10px', border:`1px solid ${G[100]}`, background:G[25], fontSize:'13px', color:G[900], outline:'none', resize:'vertical', fontFamily:'inherit', boxSizing:'border-box' }} />
           </div>
           <div style={{ background:'#fff', borderRadius:'18px', border:`1px solid ${G[100]}`, padding:'20px 22px', boxShadow:`0 2px 8px rgba(13,92,74,0.05)` }}>
-            <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700], marginBottom:'10px' }}>📅 Follow-up Date</div>
+            <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700], marginBottom:'10px' }}>ðŸ“… Follow-up Date</div>
             <input type="date" value={followUp} onChange={e => setFollowUp(e.target.value)}
               style={{ width:'100%', padding:'10px 13px', borderRadius:'10px', border:`1px solid ${G[100]}`, background:G[25], fontSize:'13px', color:G[900], outline:'none', boxSizing:'border-box', marginBottom:'10px' }} />
-            <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700], marginBottom:'6px' }}>📋 Additional Notes</div>
+            <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:G[700], marginBottom:'6px' }}>ðŸ“‹ Additional Notes</div>
             <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2}
-              placeholder="Rest advice, diet, lifestyle notes…"
+              placeholder="Rest advice, diet, lifestyle notesâ€¦"
               style={{ width:'100%', padding:'10px 13px', borderRadius:'10px', border:`1px solid ${G[100]}`, background:G[25], fontSize:'13px', color:G[900], outline:'none', resize:'vertical', fontFamily:'inherit', boxSizing:'border-box' }} />
           </div>
         </div>
@@ -207,7 +207,7 @@ export default function WritePrescription() {
               Cancel
             </button>
             <button onClick={handleSubmit} disabled={saving} style={{ padding:'12px 28px', borderRadius:'12px', border:'none', background:G[400], color:'#fff', fontWeight:700, fontSize:'14px', cursor:'pointer', opacity: saving ? 0.7 : 1, display:'flex', alignItems:'center', gap:'7px' }}>
-              {saving ? '⏳ Submitting…' : '✓ Submit Prescription'}
+              {saving ? 'â³ Submittingâ€¦' : 'âœ“ Submit Prescription'}
             </button>
           </div>
         </div>

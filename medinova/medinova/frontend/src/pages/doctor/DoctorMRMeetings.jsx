@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 const G = {
   900:'#072E25',800:'#0D5C4A',700:'#0F7A62',600:'#118A6F',
@@ -23,7 +23,7 @@ function MeetingCard({ meeting, onAction, working }) {
       {/* Top row */}
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:'12px' }}>
         <div style={{ display:'flex', alignItems:'center', gap:'12px', minWidth:0 }}>
-          <div style={{ width:'44px', height:'44px', borderRadius:'12px', background:G[50], border:`1px solid ${G[200]}`, display:'grid', placeItems:'center', fontSize:'18px', flexShrink:0 }}>💊</div>
+          <div style={{ width:'44px', height:'44px', borderRadius:'12px', background:G[50], border:`1px solid ${G[200]}`, display:'grid', placeItems:'center', fontSize:'18px', flexShrink:0 }}>ðŸ’Š</div>
           <div style={{ minWidth:0 }}>
             <div style={{ fontSize:'15px', fontWeight:700, color:G[900], marginBottom:'2px', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
               {meeting.mr_name || 'Medical Representative'}
@@ -40,10 +40,10 @@ function MeetingCard({ meeting, onAction, working }) {
       {/* Info grid */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:'8px' }}>
         {[
-          { icon:'📅', label:'Requested Date', value: meeting.requested_date || '—' },
-          { icon:'⏰', label:'Time Preference', value: meeting.time_preference || '—' },
-          { icon:'🏷️', label:'Product / Topic',  value: meeting.product || meeting.topic || 'General Discussion' },
-          { icon:'📍', label:'Meeting Mode',     value: meeting.mode || 'In-Person' },
+          { icon:'ðŸ“…', label:'Requested Date', value: meeting.requested_date || 'â€”' },
+          { icon:'â°', label:'Time Preference', value: meeting.time_preference || 'â€”' },
+          { icon:'ðŸ·ï¸', label:'Product / Topic',  value: meeting.product || meeting.topic || 'General Discussion' },
+          { icon:'ðŸ“', label:'Meeting Mode',     value: meeting.mode || 'In-Person' },
         ].map(info => (
           <div key={info.label} style={{ background:G[25], borderRadius:'10px', padding:'10px 12px', border:`1px solid ${G[100]}` }}>
             <div style={{ fontSize:'10px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:G[700], marginBottom:'3px', display:'flex', alignItems:'center', gap:'4px' }}>
@@ -67,18 +67,18 @@ function MeetingCard({ meeting, onAction, working }) {
         <div style={{ display:'flex', gap:'8px', paddingTop:'2px' }}>
           <button onClick={() => onAction(meeting.id,'accepted')} disabled={working===meeting.id}
             style={{ flex:1, padding:'10px', borderRadius:'11px', border:`1px solid ${G[200]}`, background:G[50], color:G[800], fontWeight:700, fontSize:'13px', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:'6px' }}>
-            ✓ Accept Meeting
+            âœ“ Accept Meeting
           </button>
           <button onClick={() => onAction(meeting.id,'rejected')} disabled={working===meeting.id}
             style={{ flex:1, padding:'10px', borderRadius:'11px', border:'1px solid #FECACA', background:'#FEF2F2', color:'#DC2626', fontWeight:700, fontSize:'13px', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:'6px' }}>
-            ✕ Decline
+            âœ• Decline
           </button>
         </div>
       )}
       {meeting.status === 'accepted' && (
         <div style={{ display:'flex', gap:'8px' }}>
           <div style={{ flex:1, padding:'10px', borderRadius:'11px', background:G[50], border:`1px solid ${G[200]}`, textAlign:'center', fontSize:'12px', fontWeight:700, color:G[800] }}>
-            ✅ Meeting Accepted
+            âœ… Meeting Accepted
           </div>
           <button onClick={() => onAction(meeting.id,'completed')} disabled={working===meeting.id}
             style={{ flex:1, padding:'10px', borderRadius:'11px', border:`1px solid ${G[100]}`, background:G[25], color:G[700], fontWeight:700, fontSize:'12px', cursor:'pointer' }}>
@@ -150,7 +150,7 @@ export default function DoctorMRMeetings() {
                   { label:'Accepted', value:counts.accepted, color:G[200] },
                 ].map(c => (
                   <div key={c.label} style={{ background:'rgba(255,255,255,0.10)', border:'1px solid rgba(255,255,255,0.16)', borderRadius:'12px', padding:'8px 14px', textAlign:'center' }}>
-                    <div style={{ fontSize:'20px', fontWeight:700, color:c.color }}>{loading ? '—' : c.value}</div>
+                    <div style={{ fontSize:'20px', fontWeight:700, color:c.color }}>{loading ? 'â€”' : c.value}</div>
                     <div style={{ fontSize:'10px', fontWeight:700, color:c.color, opacity:0.8, textTransform:'uppercase', letterSpacing:'0.07em' }}>{c.label}</div>
                   </div>
                 ))}
@@ -171,10 +171,10 @@ export default function DoctorMRMeetings() {
 
         {/* Cards grid */}
         {loading
-          ? <div style={{ background:'#fff', borderRadius:'18px', border:`1px solid ${G[100]}`, padding:'48px', textAlign:'center', color:'#94A3B8', fontSize:'14px' }}>Loading meetings…</div>
+          ? <div style={{ background:'#fff', borderRadius:'18px', border:`1px solid ${G[100]}`, padding:'48px', textAlign:'center', color:'#94A3B8', fontSize:'14px' }}>Loading meetingsâ€¦</div>
           : visible.length === 0
             ? <div style={{ background:'#fff', borderRadius:'18px', border:`1px solid ${G[100]}`, padding:'56px', textAlign:'center' }}>
-                <div style={{ fontSize:'36px', marginBottom:'12px' }}>💊</div>
+                <div style={{ fontSize:'36px', marginBottom:'12px' }}>ðŸ’Š</div>
                 <div style={{ fontSize:'16px', fontWeight:700, color:G[900], marginBottom:'5px' }}>No meetings here</div>
                 <div style={{ fontSize:'13px', color:'#94A3B8' }}>Medical representatives will appear here when they send requests.</div>
               </div>

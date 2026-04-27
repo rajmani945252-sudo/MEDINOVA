@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import {
   PortalCard,
   PortalEmptyState,
@@ -27,7 +28,7 @@ function AdminAppointments() {
   const token = localStorage.getItem('token')
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/admin/appointments', {
+    axios.get(`${API_BASE_URL}/api/admin/appointments`, {
       headers: { Authorization: `Bearer ${token}` },
     }).then((res) => { setAppointments(res.data); setLoading(false) })
       .catch(() => { setAppointments([]); setLoading(false) })

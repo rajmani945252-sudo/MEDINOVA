@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import {
   PortalActionTile,
   PortalCard,
@@ -17,7 +18,7 @@ function AdminDashboard() {
   const h = { headers: { Authorization: `Bearer ${token}` } }
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/admin/stats', h)
+    axios.get(`${API_BASE_URL}/api/admin/stats`, h)
       .then((res) => setStats(res.data)).catch(() => setStats({}))
   }, [])
 

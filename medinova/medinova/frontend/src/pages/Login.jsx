@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 import { Link, useNavigate } from 'react-router-dom'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 const initialForm = {
   email: '',

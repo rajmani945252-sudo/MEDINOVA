@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '@/utils/api'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 const statusStyles = {
   pending:   { bg: '#FFF4E5', color: '#C77800', label: 'Pending' },
@@ -46,7 +46,7 @@ function formatPrescriptionDate(value) {
   return new Date(value).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
-/* ── Appointments Modal ─────────────────────────────────────── */
+/* â”€â”€ Appointments Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function AppointmentsModal({ appointments, loading, error, onRetry, onClose }) {
   return (
     <div
@@ -78,13 +78,13 @@ function AppointmentsModal({ appointments, loading, error, onRetry, onClose }) {
           <button
             onClick={onClose}
             style={{ border: 'none', background: 'rgba(0,105,92,0.08)', borderRadius: '12px', width: '36px', height: '36px', cursor: 'pointer', fontSize: '20px', color: 'var(--color-text-muted)', display: 'grid', placeItems: 'center', flexShrink: 0, lineHeight: 1 }}
-          >×</button>
+          >Ã—</button>
         </div>
 
         {/* Body */}
         <div style={{ overflowY: 'auto', padding: '18px 24px', flex: 1 }}>
           {loading ? (
-            <div style={{ color: 'var(--color-text-muted)', padding: '20px 0', textAlign: 'center' }}>Loading appointments…</div>
+            <div style={{ color: 'var(--color-text-muted)', padding: '20px 0', textAlign: 'center' }}>Loading appointmentsâ€¦</div>
           ) : error ? (
             <div style={{ borderRadius: '18px', padding: '16px', background: '#FFF6F5', border: '1px solid #F1C9C6' }}>
               <div style={{ fontSize: '15px', fontWeight: 800, color: '#A93226', marginBottom: '6px' }}>Could not load appointments</div>
@@ -128,7 +128,7 @@ function AppointmentsModal({ appointments, loading, error, onRetry, onClose }) {
   )
 }
 
-/* ── Dashboard ──────────────────────────────────────────────── */
+/* â”€â”€ Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function PatientDashboard() {
   const user = JSON.parse(localStorage.getItem('user') || '{}')
   const token = localStorage.getItem('token')
@@ -227,7 +227,7 @@ function PatientDashboard() {
       <div className="page-content" style={{ maxWidth: '1800px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '290px minmax(0,1fr)', gap: '22px' }} className="patient-dashboard-layout">
 
-          {/* ── Sidebar ── */}
+          {/* â”€â”€ Sidebar â”€â”€ */}
           <aside
             className="fade-up"
             style={{
@@ -288,7 +288,7 @@ function PatientDashboard() {
             </div>
           </aside>
 
-          {/* ── Main ── */}
+          {/* â”€â”€ Main â”€â”€ */}
           <main style={{ minWidth: 0 }}>
 
             {/* Hero */}
@@ -338,7 +338,7 @@ function PatientDashboard() {
               </div>
             </section>
 
-            {/* ── Stat strip — compact ── */}
+            {/* â”€â”€ Stat strip â€” compact â”€â”€ */}
             <section
               className="fade-up-2 patient-stat-grid"
               style={{ display: 'grid', gridTemplateColumns: 'repeat(4,minmax(0,1fr))', gap: '12px', marginBottom: '18px' }}
@@ -360,7 +360,7 @@ function PatientDashboard() {
               ))}
             </section>
 
-            {/* ── Two-column content ── */}
+            {/* â”€â”€ Two-column content â”€â”€ */}
             <section style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1.15fr) 400px', gap: '22px', alignItems: 'stretch' }} className="patient-main-grid">
 
               {/* Left: Quick Actions */}
@@ -392,7 +392,7 @@ function PatientDashboard() {
               {/* Right column */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
 
-                {/* ── Compact click-to-open appointments card ── */}
+                {/* â”€â”€ Compact click-to-open appointments card â”€â”€ */}
                 <div
                   role="button"
                   tabIndex={0}
@@ -413,12 +413,12 @@ function PatientDashboard() {
                       <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-primary)', fontWeight: 800, marginBottom: '3px' }}>Activity</div>
                       <div style={{ fontSize: '17px', fontWeight: 800, color: 'var(--color-text-primary)' }}>Recent Appointments</div>
                     </div>
-                    <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'var(--color-primary-ghost)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', fontSize: '20px', fontWeight: 400, flexShrink: 0, lineHeight: 1 }}>›</div>
+                    <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'var(--color-primary-ghost)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', fontSize: '20px', fontWeight: 400, flexShrink: 0, lineHeight: 1 }}>â€º</div>
                   </div>
 
                   {/* Preview rows (max 2) */}
                   {loading ? (
-                    <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Loading…</div>
+                    <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Loadingâ€¦</div>
                   ) : dashboardData.recentAppointments.length > 0 ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       {dashboardData.recentAppointments.slice(0, 2).map((appt) => {
@@ -438,7 +438,7 @@ function PatientDashboard() {
                       })}
                       {dashboardData.recentAppointments.length > 2 && (
                         <div style={{ fontSize: '12px', color: 'var(--color-primary)', fontWeight: 700, textAlign: 'center', paddingTop: '4px' }}>
-                          +{dashboardData.recentAppointments.length - 2} more — click to view all
+                          +{dashboardData.recentAppointments.length - 2} more â€” click to view all
                         </div>
                       )}
                     </div>
