@@ -16,25 +16,23 @@ const patientRoutes = require('./routes/patientRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
-const allowedOrigins = new Set(
-  [
-    'http://localhost:3000',
-    'http://localhost:4173',
-    'http://localhost:5173',
-    'https://medinova-ckdc.vercel.app',
-    ...(process.env.CORS_ORIGINS || '')
-      .split(',')
-      .map((origin) => origin.trim())
-      .filter(Boolean),
-  ]
-);
+
+const allowedOrigins = new Set([
+  'http://localhost:3000',
+  'http://localhost:4173',
+  'http://localhost:5173',
+  'https://medinova-ckdc.vercel.app',
+  ...(process.env.CORS_ORIGINS || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+]);
 
 const corsOptions = {
   origin(origin, callback) {
     if (!origin || allowedOrigins.has(origin)) {
       return callback(null, true);
     }
-
     return callback(new Error(`Origin not allowed by CORS: ${origin}`));
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -42,7 +40,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.options('/{*path}', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -69,7 +67,6 @@ app.use((error, req, res, next) => {
   if (error?.message?.startsWith('Origin not allowed by CORS')) {
     return res.status(403).json({ message: error.message });
   }
-
   return next(error);
 });
 
@@ -78,7 +75,6 @@ const PORT = process.env.PORT || 5000;
 async function startServer() {
   try {
     await db.initializeDatabase();
-
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
