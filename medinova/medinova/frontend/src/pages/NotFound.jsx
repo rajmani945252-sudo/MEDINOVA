@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
+import { SYMBOL } from '@/utils/ui'
+import { getStoredUser } from '@/utils/session'
 
 function NotFound() {
-  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const user = getStoredUser()
   const dashboardLink = {
     patient: '/patient/dashboard',
     doctor:  '/doctor/dashboard',
@@ -23,7 +25,7 @@ function NotFound() {
         <div style={{ display:'flex', gap:'12px', justifyContent:'center', flexWrap:'wrap' }}>
           <Link to={user.role ? (dashboardLink[user.role] || '/') : '/'}>
             <button className="btn-primary" style={{ padding:'12px 28px' }}>
-              Go to Dashboard →
+              {`Go to Dashboard ${SYMBOL.arrowRight}`}
             </button>
           </Link>
           <Link to="/">

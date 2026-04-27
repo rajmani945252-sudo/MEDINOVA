@@ -37,8 +37,18 @@ const getAllUsers = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const { id } = req.params;
+
   try {
-    await db.promise().query('DELETE FROM users WHERE id=?', [id]);
+    if (Number(id) === Number(req.user?.id)) {
+      return res.status(400).json({ message: 'You cannot delete your own admin account' });
+    }
+
+    const [result] = await db.promise().query('DELETE FROM users WHERE id = ?', [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
     res.status(200).json({ message: 'User deleted!' });
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
@@ -48,7 +58,12 @@ const deleteUser = async (req, res) => {
 const verifyUser = async (req, res) => {
   const { id } = req.params;
   try {
-    await db.promise().query('UPDATE users SET is_verified=1 WHERE id=?', [id]);
+    const [result] = await db.promise().query('UPDATE users SET is_verified = 1 WHERE id = ?', [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
     res.status(200).json({ message: 'User verified!' });
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });

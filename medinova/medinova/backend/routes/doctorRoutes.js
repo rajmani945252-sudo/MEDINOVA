@@ -29,9 +29,24 @@ router.get('/profile', protect, authorize('doctor'), async (req, res) => {
 
 router.put('/profile', protect, authorize('doctor'), async (req, res) => {
   const user_id = req.user.id;
-  const { name, phone, specialization, experience, fees, location, bio, available } = req.body;
+  const name = String(req.body?.name || '').trim();
+  const phone = String(req.body?.phone || '').trim();
+  const specialization = String(req.body?.specialization || '').trim();
+  const experience = String(req.body?.experience || '').trim();
+  const fees = Number(req.body?.fees || 0);
+  const location = String(req.body?.location || '').trim();
+  const bio = String(req.body?.bio || '').trim();
+  const available = Boolean(req.body?.available);
 
   try {
+    if (!name || !specialization) {
+      return res.status(400).json({ message: 'Name and specialization are required' });
+    }
+
+    if (fees < 0) {
+      return res.status(400).json({ message: 'Consultation fees cannot be negative' });
+    }
+
     await db.promise().query(
       'UPDATE users SET name = ?, phone = ? WHERE id = ?',
       [name, phone, user_id]

@@ -10,7 +10,6 @@ const roles = [
   { value: 'doctor', icon: EMOJI.stethoscope, label: 'Doctor' },
   { value: 'store', icon: EMOJI.medicine, label: 'Medical Store' },
   { value: 'mr', icon: EMOJI.briefcase, label: 'Medicine Rep' },
-  { value: 'admin', icon: EMOJI.admin, label: 'Admin' },
 ]
 
 const initialForm = {
@@ -444,7 +443,6 @@ function Register() {
                             {role.value === 'doctor' && 'Handle patients and appointments'}
                             {role.value === 'store' && 'Manage medicines and stock'}
                             {role.value === 'mr' && 'Share products with doctors'}
-                            {role.value === 'admin' && 'Manage system, users & data'}
                           </span>
                         </span>
                       </button>

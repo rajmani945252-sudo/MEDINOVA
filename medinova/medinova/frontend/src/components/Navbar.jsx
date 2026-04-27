@@ -1,11 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { clearSession, getStoredToken, getStoredUser } from '@/utils/session'
 
 function Navbar() {
   const navigate = useNavigate()
-  const user = JSON.parse(localStorage.getItem('user') || '{}')
-  const token = localStorage.getItem('token')
+  const user = getStoredUser()
+  const token = getStoredToken()
 
-  const logout = () => { localStorage.clear(); navigate('/login') }
+  const logout = () => { clearSession(); navigate('/login') }
 
   const dashboardLink = {
     patient: '/patient/dashboard',

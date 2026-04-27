@@ -1,12 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useRef } from 'react'
-import { EMOJI } from '@/utils/ui'
+import { EMOJI, SYMBOL } from '@/utils/ui'
+import { getStoredToken, getStoredUser } from '@/utils/session'
 
 function Home() {
   const navigate = useNavigate()
   const featuresRef = useRef(null)
-  const token = localStorage.getItem('token')
-  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const token = getStoredToken()
+  const user = getStoredUser()
 
   const handleFeatureClick = (link) => {
     if (token && user.role === 'patient') {
@@ -114,7 +115,7 @@ function Home() {
                   transition: 'var(--transition)',
                 }}
               >
-                Get Started Free →
+                {`Get Started Free ${SYMBOL.arrowRight}`}
               </button>
             </Link>
 
@@ -209,7 +210,9 @@ function Home() {
                 {feature.desc}
               </div>
               <div style={{ marginTop: '14px', fontSize: '13px', fontWeight: 700, color: 'var(--color-primary)' }}>
-                {token && user.role === 'patient' ? 'Open →' : 'Get Started →'}
+                {token && user.role === 'patient'
+                  ? `Open ${SYMBOL.arrowRight}`
+                  : `Get Started ${SYMBOL.arrowRight}`}
               </div>
             </div>
           ))}
@@ -259,7 +262,7 @@ function Home() {
                     {role.desc}
                   </div>
                   <div style={{ marginTop: '14px', fontSize: '13px', fontWeight: 700, color: 'var(--color-primary)' }}>
-                    Join as {role.title.replace(/s$/, '')} →
+                    {`Join as ${role.title.replace(/s$/, '')} ${SYMBOL.arrowRight}`}
                   </div>
                 </div>
               </Link>
@@ -277,7 +280,7 @@ function Home() {
         </p>
         <Link to="/register" style={{ textDecoration: 'none' }}>
           <button className="btn-primary" style={{ padding: '16px 40px', fontSize: '16px', borderRadius: 'var(--radius-md)' }}>
-            Create Free Account →
+            {`Create Free Account ${SYMBOL.arrowRight}`}
           </button>
         </Link>
       </div>

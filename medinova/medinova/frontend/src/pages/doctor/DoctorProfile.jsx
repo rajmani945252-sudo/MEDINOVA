@@ -3,14 +3,15 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { API_BASE_URL } from '@/utils/api'
 import { SYMBOL } from '@/utils/ui'
+import { getStoredToken, getStoredUser, updateStoredUser } from '@/utils/session'
 
 
 function DoctorProfile() {
   const [form,    setForm]    = useState({ name:'', phone:'', specialization:'', experience:'', fees:'', location:'', bio:'', available:true })
   const [msg,     setMsg]     = useState('')
   const [loading, setLoading] = useState(false)
-  const token = localStorage.getItem('token')
-  const user  = JSON.parse(localStorage.getItem('user') || '{}')
+  const token = getStoredToken()
+  const user = getStoredUser()
   const h     = { headers: { Authorization: `Bearer ${token}` } }
 
   useEffect(() => {
@@ -35,8 +36,7 @@ function DoctorProfile() {
     setLoading(true)
     try {
       await axios.put(`${API_BASE_URL}/api/doctors/profile`, form, h)
-      const updated = { ...user, name: form.name, phone: form.phone }
-      localStorage.setItem('user', JSON.stringify(updated))
+      updateStoredUser({ name: form.name, phone: form.phone })
       setMsg('Profile updated!')
       setTimeout(() => setMsg(''), 3000)
     } catch { setMsg('Unable to update profile right now.'); setTimeout(() => setMsg(''), 3000) }

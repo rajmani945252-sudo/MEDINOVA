@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import axios from 'axios'
 import { API_BASE_URL } from '@/utils/api'
 import { Link, useNavigate } from 'react-router-dom'
+import { saveSession } from '@/utils/session'
 
 
 const initialForm = {
@@ -70,8 +71,7 @@ function Login() {
       })
 
       const { token, user } = res.data
-      localStorage.setItem('token', token)
-      localStorage.setItem('user', JSON.stringify(user))
+      saveSession(token, user)
 
       const routes = {
         patient: '/patient/dashboard',

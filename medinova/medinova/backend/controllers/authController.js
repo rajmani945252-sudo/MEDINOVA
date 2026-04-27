@@ -2,7 +2,7 @@ const db = require('../config/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const allowedRoles = new Set(['patient', 'doctor', 'store', 'mr', 'admin']);
+const publicRegistrationRoles = new Set(['patient', 'doctor', 'store', 'mr']);
 
 function normalizeEmail(value) {
   return String(value || '').trim().toLowerCase();
@@ -40,12 +40,17 @@ const register = async (req, res) => {
   const name = String(req.body?.name || '').trim();
   const email = normalizeEmail(req.body?.email);
   const password = String(req.body?.password || '');
-  const role = allowedRoles.has(req.body?.role) ? req.body.role : 'patient';
+  const requestedRole = String(req.body?.role || 'patient').trim().toLowerCase();
+  const role = publicRegistrationRoles.has(requestedRole) ? requestedRole : 'patient';
   const phone = String(req.body?.phone || '').trim();
 
   try {
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Name, email, and password are required' });
+    }
+
+    if (requestedRole === 'admin') {
+      return res.status(403).json({ message: 'Admin accounts cannot be created from public registration' });
     }
 
     if (password.length < 6) {

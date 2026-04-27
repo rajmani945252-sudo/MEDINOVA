@@ -4,22 +4,129 @@ const mysqlPromise = require('mysql2/promise');
 require('dotenv').config();
 
 const DEFAULT_DB_NAME = 'medinova';
-const databaseName = process.env.DB_NAME || DEFAULT_DB_NAME;
-const baseConfig = {
-  host: process.env.DB_HOST || '127.0.0.1',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  port: Number(process.env.DB_PORT || 3306),
-};
+let databaseReady = false;
+let initializationPromise = null;
+let lastInitializationError = null;
+let lastInitializedAt = null;
+let initializationAttempts = 0;
 
-const db = mysql.createPool({
+function pickFirst(...values) {
+  for (const value of values) {
+    if (value !== undefined && value !== null && String(value).trim() !== '') {
+      return String(value).trim();
+    }
+  }
+
+  return '';
+}
+
+function parseInteger(value, fallback) {
+  const parsed = Number.parseInt(String(value || ''), 10);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function resolveSslConfig(databaseUrl) {
+  const rawSslValue = pickFirst(
+    process.env.DB_SSL,
+    process.env.MYSQL_SSL,
+    process.env.DATABASE_SSL,
+    databaseUrl?.searchParams?.get('sslmode'),
+    databaseUrl?.searchParams?.get('ssl')
+  );
+
+  if (!rawSslValue) {
+    return undefined;
+  }
+
+  const normalizedValue = rawSslValue.toLowerCase();
+
+  if (['1', 'true', 'yes', 'require', 'required', 'prefer'].includes(normalizedValue)) {
+    return { rejectUnauthorized: false };
+  }
+
+  return undefined;
+}
+
+function decodePart(value, fallback = '') {
+  if (!value) {
+    return fallback;
+  }
+
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function resolveDatabaseConfig() {
+  const databaseUrlRaw = pickFirst(process.env.DATABASE_URL, process.env.MYSQL_URL);
+
+  if (databaseUrlRaw) {
+    const databaseUrl = new URL(databaseUrlRaw);
+    const protocol = databaseUrl.protocol.replace(':', '').toLowerCase();
+
+    if (!['mysql', 'mysql2'].includes(protocol)) {
+      throw new Error(`Unsupported database protocol: ${databaseUrl.protocol}`);
+    }
+
+    const databaseFromUrl = databaseUrl.pathname.replace(/^\/+/, '');
+
+    return {
+      databaseName: pickFirst(
+        process.env.DB_NAME,
+        process.env.MYSQLDATABASE,
+        process.env.MYSQL_DATABASE,
+        databaseFromUrl,
+        DEFAULT_DB_NAME
+      ),
+      baseConfig: {
+        host: databaseUrl.hostname || '127.0.0.1',
+        user: decodePart(databaseUrl.username, 'root'),
+        password: decodePart(databaseUrl.password),
+        port: parseInteger(databaseUrl.port, 3306),
+        connectTimeout: parseInteger(
+          pickFirst(process.env.DB_CONNECT_TIMEOUT_MS, process.env.MYSQL_CONNECT_TIMEOUT_MS),
+          10000
+        ),
+        ssl: resolveSslConfig(databaseUrl),
+      },
+    };
+  }
+
+  return {
+    databaseName: pickFirst(
+      process.env.DB_NAME,
+      process.env.MYSQLDATABASE,
+      process.env.MYSQL_DATABASE,
+      DEFAULT_DB_NAME
+    ),
+    baseConfig: {
+      host: pickFirst(process.env.DB_HOST, process.env.MYSQLHOST, process.env.MYSQL_HOST, '127.0.0.1'),
+      user: pickFirst(process.env.DB_USER, process.env.MYSQLUSER, process.env.MYSQL_USER, 'root'),
+      password: pickFirst(process.env.DB_PASSWORD, process.env.MYSQLPASSWORD, process.env.MYSQL_PASSWORD, ''),
+      port: parseInteger(pickFirst(process.env.DB_PORT, process.env.MYSQLPORT, process.env.MYSQL_PORT), 3306),
+      connectTimeout: parseInteger(
+        pickFirst(process.env.DB_CONNECT_TIMEOUT_MS, process.env.MYSQL_CONNECT_TIMEOUT_MS),
+        10000
+      ),
+      ssl: resolveSslConfig(),
+    },
+  };
+}
+
+const { databaseName, baseConfig } = resolveDatabaseConfig();
+
+const poolConfig = {
   ...baseConfig,
   database: databaseName,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
   decimalNumbers: true,
-});
+};
+
+const db = mysql.createPool(poolConfig);
 
 function escapeIdentifier(value) {
   return String(value).replace(/`/g, '``');
@@ -186,16 +293,25 @@ async function ensureSchema() {
   }
 }
 
-let initializationPromise = null;
-
 async function initializeDatabase() {
+  if (databaseReady) {
+    return true;
+  }
+
   if (!initializationPromise) {
+    initializationAttempts += 1;
     initializationPromise = (async () => {
       await ensureDatabase();
       await db.promise().query('SELECT 1');
       await ensureSchema();
-      console.log(`MySQL connected successfully to "${databaseName}"`);
+      databaseReady = true;
+      lastInitializationError = null;
+      lastInitializedAt = new Date().toISOString();
+      console.log(`MySQL connected successfully to "${databaseName}" on ${baseConfig.host}:${baseConfig.port}`);
+      return true;
     })().catch((error) => {
+      databaseReady = false;
+      lastInitializationError = error;
       initializationPromise = null;
       throw error;
     });
@@ -204,5 +320,23 @@ async function initializeDatabase() {
   return initializationPromise;
 }
 
+function isReady() {
+  return databaseReady;
+}
+
+function getStatus() {
+  return {
+    ready: databaseReady,
+    database: databaseName,
+    host: baseConfig.host,
+    port: baseConfig.port,
+    attempts: initializationAttempts,
+    lastInitializedAt,
+    lastError: lastInitializationError ? lastInitializationError.message : null,
+  };
+}
+
 module.exports = db;
 module.exports.initializeDatabase = initializeDatabase;
+module.exports.isReady = isReady;
+module.exports.getStatus = getStatus;

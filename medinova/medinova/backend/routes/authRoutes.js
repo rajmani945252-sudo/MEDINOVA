@@ -27,13 +27,18 @@ router.get('/profile', protect, async (req, res) => {
 });
 
 router.put('/profile', protect, async (req, res) => {
-  const { name, phone } = req.body;
+  const name = String(req.body?.name || '').trim();
+  const phone = String(req.body?.phone || '').trim();
   const id = req.user.id;
 
   try {
+    if (!name) {
+      return res.status(400).json({ message: 'Name is required' });
+    }
+
     await db.promise().query(
       'UPDATE users SET name = ?, phone = ? WHERE id = ?',
-      [String(name || '').trim(), String(phone || '').trim(), id]
+      [name, phone, id]
     );
 
     const [rows] = await db.promise().query(

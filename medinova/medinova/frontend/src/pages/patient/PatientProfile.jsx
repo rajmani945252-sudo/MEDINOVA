@@ -2,11 +2,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { API_BASE_URL } from '@/utils/api'
+import { getStoredToken, getStoredUser, updateStoredUser } from '@/utils/session'
 
 
 function PatientProfile() {
-  const token = localStorage.getItem('token')
-  const storedUser = JSON.parse(localStorage.getItem('user') || '{}')
+  const token = getStoredToken()
+  const storedUser = getStoredUser()
 
   const [form, setForm] = useState({ name: '', email: '', phone: '' })
   const [msg, setMsg] = useState('')
@@ -42,8 +43,7 @@ function PatientProfile() {
         { headers: { Authorization: `Bearer ${token}` } },
       )
 
-      const updatedUser = { ...storedUser, name: form.name, phone: form.phone }
-      localStorage.setItem('user', JSON.stringify(updatedUser))
+      updateStoredUser({ name: form.name, phone: form.phone })
       setMsg('Profile updated successfully!')
       setTimeout(() => setMsg(''), 3000)
     } catch (err) {

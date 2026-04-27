@@ -178,14 +178,33 @@ const getReminders = async (req, res) => {
 
 const addReminder = async (req, res) => {
   const patient_id = req.user.id;
-  const { medicine, time_morning, time_afternoon, time_night, notes } = req.body;
+  const medicine = String(req.body?.medicine || '').trim();
+  const time_morning = String(req.body?.time_morning || '').trim();
+  const time_afternoon = String(req.body?.time_afternoon || '').trim();
+  const time_night = String(req.body?.time_night || '').trim();
+  const notes = String(req.body?.notes || '').trim();
 
   try {
+    if (!medicine) {
+      return res.status(400).json({ message: 'Medicine name is required' });
+    }
+
+    if (!time_morning && !time_afternoon && !time_night) {
+      return res.status(400).json({ message: 'At least one reminder time is required' });
+    }
+
     await db.promise().query(
       `INSERT INTO medicine_reminders
        (patient_id, medicine, time_morning, time_afternoon, time_night, notes)
        VALUES (?,?,?,?,?,?)`,
-      [patient_id, medicine, time_morning, time_afternoon, time_night, notes]
+      [
+        patient_id,
+        medicine,
+        time_morning || null,
+        time_afternoon || null,
+        time_night || null,
+        notes || null,
+      ]
     );
 
     return res.status(201).json({ message: 'Reminder added!' });
@@ -196,12 +215,17 @@ const addReminder = async (req, res) => {
 
 const deleteReminder = async (req, res) => {
   const { id } = req.params;
+  const patient_id = req.user.id;
 
   try {
-    await db.promise().query(
-      'UPDATE medicine_reminders SET is_active = 0 WHERE id = ?',
-      [id]
+    const [result] = await db.promise().query(
+      'UPDATE medicine_reminders SET is_active = 0 WHERE id = ? AND patient_id = ?',
+      [id, patient_id]
     );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Reminder not found' });
+    }
 
     return res.status(200).json({ message: 'Reminder removed!' });
   } catch (err) {

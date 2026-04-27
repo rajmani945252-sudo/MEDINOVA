@@ -99,6 +99,15 @@ const writePrescription = async (req, res) => {
       return res.status(404).json({ message: 'Appointment not found for this doctor' });
     }
 
+    const [existingPrescriptions] = await db.promise().query(
+      'SELECT id FROM prescriptions WHERE appointment_id = ? LIMIT 1',
+      [appointment_id]
+    );
+
+    if (existingPrescriptions.length > 0) {
+      return res.status(409).json({ message: 'A prescription already exists for this appointment' });
+    }
+
     const resolvedPatientId = patient_id || appointments[0].patient_id;
     const medicineSummary = buildMedicineSummary(normalizedMedicines);
     const instructionSummary = buildInstructionSummary(normalizedMedicines, notes);
@@ -148,7 +157,8 @@ const getMyPrescriptions = async (req, res) => {
   const patient_id = req.user.id;
 
   try {
-    const [rows] = await db.promise().query(`
+    const [rows] = await db.promise().query(
+      `
       SELECT p.id, p.medicines, p.instructions, p.notes, p.created_at,
              u.name AS doctor_name,
              COALESCE(d.specialization, 'General Physician') AS specialization
@@ -157,7 +167,9 @@ const getMyPrescriptions = async (req, res) => {
       LEFT JOIN doctor_profiles d ON u.id = d.user_id
       WHERE p.patient_id = ?
       ORDER BY p.created_at DESC
-    `, [patient_id]);
+    `,
+      [patient_id]
+    );
 
     return res.status(200).json(
       rows.map((row) => {
@@ -178,16 +190,27 @@ const getMyPrescriptions = async (req, res) => {
 };
 
 const getPatientPrescriptions = async (req, res) => {
-  const doctor_id = req.user.id;
   const { patientId } = req.params;
 
   try {
-    const [rows] = await db.promise().query(`
-      SELECT id, diagnosis, medicines, instructions, notes, follow_up_date, tests_recommended, created_at
-      FROM prescriptions
-      WHERE doctor_id = ? AND patient_id = ?
-      ORDER BY created_at DESC
-    `, [doctor_id, patientId]);
+    const isAdmin = req.user.role === 'admin';
+    const sql = isAdmin
+      ? `
+        SELECT p.id, p.diagnosis, p.medicines, p.instructions, p.notes, p.follow_up_date, p.tests_recommended, p.created_at,
+               d.name AS doctor_name
+        FROM prescriptions p
+        JOIN users d ON p.doctor_id = d.id
+        WHERE p.patient_id = ?
+        ORDER BY p.created_at DESC
+      `
+      : `
+        SELECT id, diagnosis, medicines, instructions, notes, follow_up_date, tests_recommended, created_at
+        FROM prescriptions
+        WHERE doctor_id = ? AND patient_id = ?
+        ORDER BY created_at DESC
+      `;
+    const params = isAdmin ? [patientId] : [req.user.id, patientId];
+    const [rows] = await db.promise().query(sql, params);
 
     return res.status(200).json(
       rows.map((row) => ({
