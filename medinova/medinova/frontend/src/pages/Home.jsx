@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useRef } from 'react'
+import { EMOJI } from '@/utils/ui'
 
 function Home() {
   const navigate = useNavigate()
@@ -16,19 +17,19 @@ function Home() {
   }
 
   const features = [
-    { icon: '🔍', title: 'Find Doctors', desc: 'Search by specialty, location, or name and book instantly.', link: '/patient/search' },
-    { icon: '📅', title: 'Book Appointments', desc: 'Schedule with your preferred doctor in seconds.', link: '/patient/appointments' },
-    { icon: '💊', title: 'Digital Prescriptions', desc: 'Receive and store prescriptions digitally.', link: '/patient/prescriptions' },
-    { icon: '🤖', title: 'AI Symptom Checker', desc: 'Describe symptoms and get doctor suggestions quickly.', link: '/patient/symptoms' },
-    { icon: '🏪', title: 'Medicine Orders', desc: 'Order medicines directly from nearby medical stores.', link: '/patient/search' },
-    { icon: '🏥', title: 'Health Card', desc: 'Your complete digital health profile in one place.', link: '/patient/health-card' },
+    { icon: EMOJI.search, title: 'Find Doctors', desc: 'Search by specialty, location, or name and book instantly.', link: '/patient/search' },
+    { icon: EMOJI.calendar, title: 'Book Appointments', desc: 'Schedule with your preferred doctor in seconds.', link: '/patient/appointments' },
+    { icon: EMOJI.medicine, title: 'Digital Prescriptions', desc: 'Receive and store prescriptions digitally.', link: '/patient/prescriptions' },
+    { icon: EMOJI.robot, title: 'AI Symptom Checker', desc: 'Describe symptoms and get doctor suggestions quickly.', link: '/patient/symptoms' },
+    { icon: EMOJI.store, title: 'Medicine Orders', desc: 'Order medicines directly from nearby medical stores.', link: '/patient/search' },
+    { icon: EMOJI.hospital, title: 'Health Card', desc: 'Your complete digital health profile in one place.', link: '/patient/health-card' },
   ]
 
   const roles = [
-    { icon: '🤒', title: 'Patients', desc: 'Book appointments, view prescriptions, and track health.' },
-    { icon: '🩺', title: 'Doctors', desc: 'Manage appointments, write prescriptions, and consult patients.' },
-    { icon: '🏪', title: 'Medical Stores', desc: 'Manage inventory, receive orders, and track deliveries.' },
-    { icon: '💼', title: 'Medical Reps', desc: 'Showcase products and request doctor meetings.' },
+    { icon: EMOJI.patient, title: 'Patients', desc: 'Book appointments, view prescriptions, and track health.' },
+    { icon: EMOJI.stethoscope, title: 'Doctors', desc: 'Manage appointments, write prescriptions, and consult patients.' },
+    { icon: EMOJI.store, title: 'Medical Stores', desc: 'Manage inventory, receive orders, and track deliveries.' },
+    { icon: EMOJI.briefcase, title: 'Medical Reps', desc: 'Showcase products and request doctor meetings.' },
   ]
 
   const stats = [

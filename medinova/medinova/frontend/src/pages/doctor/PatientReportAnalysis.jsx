@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { EMOJI, SYMBOL } from "@/utils/ui";
 
 const PATIENTS = [
   { id: "P001", name: "Aarav Mehta", age: 34 },
@@ -164,10 +165,10 @@ function PatientRecordModal({ patient, report, onClose }) {
       <div style={S.modal}>
         <div style={S.modalHeader}>
           <div>
-            <div style={S.modalTitle}>📋 Add to Patient Record</div>
-            <div style={S.modalSub}>{patient.name} · {report.name}</div>
+            <div style={S.modalTitle}>{EMOJI.clipboard} Add to Patient Record</div>
+            <div style={S.modalSub}>{patient.name} {SYMBOL.bullet} {report.name}</div>
           </div>
-          <button onClick={onClose} style={S.closeBtn}>✕</button>
+          <button onClick={onClose} style={S.closeBtn}>{SYMBOL.cross}</button>
         </div>
         <div style={S.modalBody}>
           <div style={S.infoBox}>
@@ -176,13 +177,13 @@ function PatientRecordModal({ patient, report, onClose }) {
             <div style={S.infoRow}><span style={S.infoLabel}>Date</span><span>{report.date}</span></div>
             <div style={S.infoRow}><span style={S.infoLabel}>Status</span>
               <span style={{ color: report.status === "analyzed" ? C.mintDeep : "#a16207", fontWeight: "600" }}>
-                {report.status === "analyzed" ? "✓ Analyzed" : "⏳ Pending"}
+                {report.status === "analyzed" ? `${SYMBOL.check} Analyzed` : `${SYMBOL.hourglass} Pending`}
               </span>
             </div>
           </div>
           {report.aiSummary && (
             <div style={S.aiPreview}>
-              <div style={S.aiPreviewLabel}>🤖 AI Summary</div>
+              <div style={S.aiPreviewLabel}>{EMOJI.robot} AI Summary</div>
               <p style={S.aiPreviewText}>{report.aiSummary}</p>
             </div>
           )}
@@ -196,7 +197,7 @@ function PatientRecordModal({ patient, report, onClose }) {
         <div style={S.modalFooter}>
           <button onClick={onClose} style={S.cancelBtn}>Cancel</button>
           <button onClick={handleSave} style={S.saveBtn} disabled={saved}>
-            {saved ? "✓ Saved!" : "Save to Record"}
+            {saved ? `${SYMBOL.check} Saved!` : "Save to Record"}
           </button>
         </div>
       </div>
@@ -217,17 +218,17 @@ function PrescriptionModal({ patient, report, onClose }) {
       <div style={{ ...S.modal, maxWidth: "620px" }}>
         <div style={S.modalHeader}>
           <div>
-            <div style={S.modalTitle}>💊 Create Prescription</div>
-            <div style={S.modalSub}>{patient.name} · {report.type}</div>
+            <div style={S.modalTitle}>{EMOJI.medicine} Create Prescription</div>
+            <div style={S.modalSub}>{patient.name} {SYMBOL.bullet} {report.type}</div>
           </div>
-          <button onClick={onClose} style={S.closeBtn}>✕</button>
+          <button onClick={onClose} style={S.closeBtn}>{SYMBOL.cross}</button>
         </div>
         <div style={{ ...S.modalBody, maxHeight: "60vh", overflowY: "auto" }}>
-          <div style={S.infoBox}>
-            <div style={S.infoRow}><span style={S.infoLabel}>Patient</span><span>{patient.name}</span></div>
-            <div style={S.infoRow}><span style={S.infoLabel}>Age</span><span>{patient.age} yrs</span></div>
-            <div style={S.infoRow}><span style={S.infoLabel}>Based on</span><span>{report.name} · {report.date}</span></div>
-          </div>
+            <div style={S.infoBox}>
+              <div style={S.infoRow}><span style={S.infoLabel}>Patient</span><span>{patient.name}</span></div>
+              <div style={S.infoRow}><span style={S.infoLabel}>Age</span><span>{patient.age} yrs</span></div>
+              <div style={S.infoRow}><span style={S.infoLabel}>Based on</span><span>{report.name} {SYMBOL.bullet} {report.date}</span></div>
+            </div>
           <div style={S.fieldGroup}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
               <label style={S.fieldLabel}>Medicines</label>
@@ -246,7 +247,7 @@ function PrescriptionModal({ patient, report, onClose }) {
                   <option>As needed</option>
                 </select>
                 <input placeholder="Duration" value={med.duration} onChange={e => updateMed(i, "duration", e.target.value)} style={{ ...S.input, flex: 1 }} />
-                {medicines.length > 1 && <button onClick={() => removeMed(i)} style={S.removeMedBtn}>✕</button>}
+                {medicines.length > 1 && <button onClick={() => removeMed(i)} style={S.removeMedBtn}>{SYMBOL.cross}</button>}
               </div>
             ))}
           </div>
@@ -260,7 +261,7 @@ function PrescriptionModal({ patient, report, onClose }) {
         <div style={S.modalFooter}>
           <button onClick={onClose} style={S.cancelBtn}>Cancel</button>
           <button onClick={handleSave} style={S.saveBtn} disabled={saved}>
-            {saved ? "✓ Prescription Created!" : "Create Prescription"}
+            {saved ? `${SYMBOL.check} Prescription Created!` : "Create Prescription"}
           </button>
         </div>
       </div>
@@ -277,15 +278,15 @@ function ShareModal({ patient, report, onClose }) {
       <div style={{ ...S.modal, maxWidth: "440px" }}>
         <div style={S.modalHeader}>
           <div>
-            <div style={S.modalTitle}>📤 Share with Patient</div>
+            <div style={S.modalTitle}>Share with Patient</div>
             <div style={S.modalSub}>{report.name}</div>
           </div>
-          <button onClick={onClose} style={S.closeBtn}>✕</button>
+          <button onClick={onClose} style={S.closeBtn}>{SYMBOL.cross}</button>
         </div>
         <div style={S.modalBody}>
           <div style={S.infoBox}>
             <div style={S.infoRow}><span style={S.infoLabel}>Patient</span><span>{patient.name}</span></div>
-            <div style={S.infoRow}><span style={S.infoLabel}>Report</span><span>{report.name} · {report.date}</span></div>
+            <div style={S.infoRow}><span style={S.infoLabel}>Report</span><span>{report.name} {SYMBOL.bullet} {report.date}</span></div>
           </div>
           <div style={S.fieldGroup}>
             <label style={S.fieldLabel}>Share via</label>
@@ -293,7 +294,7 @@ function ShareModal({ patient, report, onClose }) {
               {["email", "sms", "app"].map(m => (
                 <button key={m} onClick={() => setMethod(m)}
                   style={{ ...S.methodBtn, ...(method === m ? S.methodBtnActive : {}) }}>
-                  {m === "email" ? "📧 Email" : m === "sms" ? "💬 SMS" : "📱 App"}
+                  {m === "email" ? "Email" : m === "sms" ? "SMS" : "App"}
                 </button>
               ))}
             </div>
@@ -302,7 +303,7 @@ function ShareModal({ patient, report, onClose }) {
         <div style={S.modalFooter}>
           <button onClick={onClose} style={S.cancelBtn}>Cancel</button>
           <button onClick={handleSend} style={S.saveBtn} disabled={sent}>
-            {sent ? "✓ Sent!" : "Send Report"}
+            {sent ? `${SYMBOL.check} Sent!` : "Send Report"}
           </button>
         </div>
       </div>
@@ -339,7 +340,7 @@ export default function PatientReportAnalysis() {
           <p style={S.subtitle}>AI-assisted interpretation of diagnostic reports</p>
         </div>
         <div style={S.aiBadge}>
-          <span style={{ fontSize: "28px" }}>🤖</span>
+          <span style={{ fontSize: "28px" }}>{EMOJI.robot}</span>
           <div>
             <div style={S.aiTitle}>AI Analysis Active</div>
             <div style={S.aiSub}>Powered by clinical intelligence</div>
@@ -374,10 +375,10 @@ export default function PatientReportAnalysis() {
                 <div style={S.reportItemTop}>
                   <div style={S.reportName}>{r.name}</div>
                   <span style={{ ...S.reportBadge, ...(r.status === "analyzed" ? S.statusAnalyzed : S.statusPending) }}>
-                    {r.status === "analyzed" ? "✓" : "⏳"}
+                    {r.status === "analyzed" ? SYMBOL.check : SYMBOL.hourglass}
                   </span>
                 </div>
-                <div style={S.reportMeta}>{r.type} · {r.date}</div>
+                <div style={S.reportMeta}>{r.type} {SYMBOL.bullet} {r.date}</div>
               </div>
             ))}
           </div>
@@ -393,8 +394,8 @@ export default function PatientReportAnalysis() {
                   <h2 style={S.reportTitle}>{selectedReport.name}</h2>
                   <div style={S.reportSubHead}>
                     <span style={S.typeBadge}>{selectedReport.type}</span>
-                    <span style={S.metaChip}>📅 {selectedReport.date}</span>
-                    <span style={S.metaChip}>👤 {selectedPatient.name}</span>
+                    <span style={S.metaChip}>{EMOJI.calendar} {selectedReport.date}</span>
+                    <span style={S.metaChip}>{EMOJI.person} {selectedPatient.name}</span>
                   </div>
                 </div>
                 <div style={S.abnormalBox}>
@@ -407,18 +408,18 @@ export default function PatientReportAnalysis() {
             {/* AI interpretation card — teal gradient */}
             <div style={S.aiCard}>
               <div style={S.aiCardHead}>
-                <span style={{ fontSize: "20px" }}>🤖</span>
+                <span style={{ fontSize: "20px" }}>{EMOJI.robot}</span>
                 <span style={S.aiCardTitle}>AI Clinical Interpretation</span>
                 {selectedReport.status === "pending" && (
                   <button onClick={handleAnalyze} style={S.analyzeBtn} disabled={analyzing}>
-                    {analyzing ? "Analyzing…" : "Run Analysis"}
+                    {analyzing ? `Analyzing${SYMBOL.ellipsis}` : "Run Analysis"}
                   </button>
                 )}
               </div>
               {selectedReport.aiSummary
                 ? <p style={S.aiText}>{selectedReport.aiSummary}</p>
                 : <div style={S.noAnalysis}>
-                    {analyzing ? <span>⏳ Running AI analysis on {totalCount} parameters…</span>
+                    {analyzing ? <span>{SYMBOL.hourglass} Running AI analysis on {totalCount} parameters{SYMBOL.ellipsis}</span>
                                : <span>Click "Run Analysis" to generate AI interpretation.</span>}
                   </div>}
             </div>
@@ -453,9 +454,9 @@ export default function PatientReportAnalysis() {
 
             {/* Action buttons */}
             <div style={S.actions}>
-              <button style={S.actionBtn} onClick={() => setShowRecordModal(true)}>📋 Add to Patient Record</button>
-              <button style={S.actionBtn} onClick={() => setShowPrescriptionModal(true)}>💊 Create Prescription</button>
-              <button style={S.actionBtnPrimary} onClick={() => setShowShareModal(true)}>📤 Share with Patient</button>
+              <button style={S.actionBtn} onClick={() => setShowRecordModal(true)}>{EMOJI.clipboard} Add to Patient Record</button>
+              <button style={S.actionBtn} onClick={() => setShowPrescriptionModal(true)}>{EMOJI.medicine} Create Prescription</button>
+              <button style={S.actionBtnPrimary} onClick={() => setShowShareModal(true)}>Share with Patient</button>
             </div>
           </div>
         ) : (

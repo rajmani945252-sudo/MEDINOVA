@@ -2,14 +2,15 @@ import { useMemo, useState } from 'react'
 import axios from 'axios'
 import { API_BASE_URL } from '@/utils/api'
 import { Link, useNavigate } from 'react-router-dom'
+import { EMOJI } from '@/utils/ui'
 
 
 const roles = [
-  { value: 'patient', icon: 'ðŸ¤’', label: 'Patient' },
-  { value: 'doctor', icon: 'ðŸ©º', label: 'Doctor' },
-  { value: 'store', icon: 'ðŸ’Š', label: 'Medical Store' },
-  { value: 'mr', icon: 'ðŸ’¼', label: 'Medicine Rep' },
-  { value: 'admin', icon: 'ðŸ› ï¸', label: 'Admin' }, // âœ… NEW
+  { value: 'patient', icon: EMOJI.patient, label: 'Patient' },
+  { value: 'doctor', icon: EMOJI.stethoscope, label: 'Doctor' },
+  { value: 'store', icon: EMOJI.medicine, label: 'Medical Store' },
+  { value: 'mr', icon: EMOJI.briefcase, label: 'Medicine Rep' },
+  { value: 'admin', icon: EMOJI.admin, label: 'Admin' },
 ]
 
 const initialForm = {
@@ -287,7 +288,7 @@ function Register() {
                     fontSize: '78px',
                   }}
                 >
-                  <span style={{ filter: 'drop-shadow(0 10px 18px rgba(56,189,248,0.18))' }}>ðŸ©º</span>
+                  <span style={{ filter: 'drop-shadow(0 10px 18px rgba(56,189,248,0.18))' }}>{EMOJI.stethoscope}</span>
                 </div>
               </div>
 

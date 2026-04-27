@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { API_BASE_URL } from '@/utils/api'
+import { EMOJI, SYMBOL } from '@/utils/ui'
 
 
 const TIME_SLOTS = [
-  { key: 'time_morning',   label: 'Morning',   emoji: 'ðŸŒ…', time: '8:00 AM',  bg: '#FFFBEB', color: '#B45309', pill: '#FDE68A' },
-  { key: 'time_afternoon', label: 'Afternoon', emoji: 'â˜€ï¸',  time: '2:00 PM',  bg: '#FFF7ED', color: '#C2410C', pill: '#FED7AA' },
-  { key: 'time_night',     label: 'Night',     emoji: 'ðŸŒ™', time: '9:00 PM',  bg: '#EEF2FF', color: '#4338CA', pill: '#C7D2FE' },
+  { key: 'time_morning',   label: 'Morning',   emoji: EMOJI.sunrise, time: '8:00 AM',  bg: '#FFFBEB', color: '#B45309', pill: '#FDE68A' },
+  { key: 'time_afternoon', label: 'Afternoon', emoji: EMOJI.sun,     time: '2:00 PM',  bg: '#FFF7ED', color: '#C2410C', pill: '#FED7AA' },
+  { key: 'time_night',     label: 'Night',     emoji: EMOJI.moon,    time: '9:00 PM',  bg: '#EEF2FF', color: '#4338CA', pill: '#C7D2FE' },
 ]
 
 const EMPTY_FORM = { medicine: '', time_morning: false, time_afternoon: false, time_night: false, notes: '' }
@@ -78,7 +79,7 @@ export default function MedicineReminders() {
     >
       <div className="page-content" style={{ maxWidth: '860px', margin: '0 auto', padding: '32px 24px 80px' }}>
 
-        {/* â”€â”€ Back link â”€â”€ */}
+        {/* Back link */}
         <Link
           to="/patient/dashboard"
           className="fade-up"
@@ -88,10 +89,10 @@ export default function MedicineReminders() {
             marginBottom: '24px', opacity: 0.8,
           }}
         >
-          â† Back to Dashboard
+          {SYMBOL.arrowLeft} Back to Dashboard
         </Link>
 
-        {/* â”€â”€ Hero header â”€â”€ */}
+        {/* Hero header */}
         <div
           className="fade-up"
           style={{
@@ -119,7 +120,7 @@ export default function MedicineReminders() {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '12px' }}>
             <div style={{ background: '#FFFFFF', borderRadius: '20px', padding: '16px 24px', border: '1px solid rgba(0,105,92,0.10)', textAlign: 'center', minWidth: '120px' }}>
               <div style={{ fontSize: '34px', fontWeight: 800, color: 'var(--color-primary)', lineHeight: 1 }}>
-                {loading ? 'â€”' : reminders.length}
+                {loading ? SYMBOL.emDash : reminders.length}
               </div>
               <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', fontWeight: 700, marginTop: '4px' }}>Active</div>
             </div>
@@ -128,12 +129,12 @@ export default function MedicineReminders() {
               onClick={() => { setShowForm(v => !v); setForm(EMPTY_FORM) }}
               style={{ padding: '12px 22px', borderRadius: '16px', fontSize: '14px', fontWeight: 700, whiteSpace: 'nowrap' }}
             >
-              {showForm ? 'âœ• Cancel' : '+ Add Reminder'}
+              {showForm ? `${SYMBOL.cross} Cancel` : '+ Add Reminder'}
             </button>
           </div>
         </div>
 
-        {/* â”€â”€ Stats strip â”€â”€ */}
+        {/* Stats strip */}
         <div
           className="fade-up-1"
           style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px', marginBottom: '22px' }}
@@ -161,7 +162,7 @@ export default function MedicineReminders() {
           })}
         </div>
 
-        {/* â”€â”€ Success toast â”€â”€ */}
+        {/* Success toast */}
         {msg && (
           <div
             className="fade-up"
@@ -172,11 +173,11 @@ export default function MedicineReminders() {
               fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px',
             }}
           >
-            âœ… {msg}
+            {SYMBOL.check} {msg}
           </div>
         )}
 
-        {/* â”€â”€ Add Form â”€â”€ */}
+        {/* Add form */}
         {showForm && (
           <div
             className="fade-up"
@@ -187,7 +188,7 @@ export default function MedicineReminders() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '26px' }}>
-              <div style={{ width: '50px', height: '50px', borderRadius: '18px', background: 'var(--color-primary-ghost)', display: 'grid', placeItems: 'center', fontSize: '24px' }}>ðŸ’Š</div>
+              <div style={{ width: '50px', height: '50px', borderRadius: '18px', background: 'var(--color-primary-ghost)', display: 'grid', placeItems: 'center', fontSize: '24px' }}>{EMOJI.medicine}</div>
               <div>
                 <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-primary)', fontWeight: 800, marginBottom: '3px' }}>New Entry</div>
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', color: 'var(--color-text-primary)' }}>Add Medicine Reminder</h2>
@@ -234,7 +235,7 @@ export default function MedicineReminders() {
                         <div style={{ fontSize: '14px', fontWeight: 800, color: active ? 'var(--color-primary)' : 'var(--color-text-primary)', marginBottom: '4px' }}>{slot.label}</div>
                         <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>{slot.time}</div>
                         {active && (
-                          <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'var(--color-primary)', display: 'grid', placeItems: 'center', margin: '10px auto 0', color: '#fff', fontSize: '11px', fontWeight: 800 }}>âœ“</div>
+                          <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'var(--color-primary)', display: 'grid', placeItems: 'center', margin: '10px auto 0', color: '#fff', fontSize: '11px', fontWeight: 800 }}>{SYMBOL.check}</div>
                         )}
                       </div>
                     )
@@ -278,7 +279,7 @@ export default function MedicineReminders() {
           </div>
         )}
 
-        {/* â”€â”€ Empty state â”€â”€ */}
+        {/* Empty state */}
         {!loading && reminders.length === 0 && !showForm && (
           <div
             className="fade-up-2"
@@ -288,7 +289,7 @@ export default function MedicineReminders() {
               boxShadow: 'var(--shadow-card)', textAlign: 'center',
             }}
           >
-            <div style={{ width: '90px', height: '90px', borderRadius: '30px', background: 'var(--color-primary-ghost)', display: 'grid', placeItems: 'center', fontSize: '42px', margin: '0 auto 22px' }}>ðŸ’Š</div>
+            <div style={{ width: '90px', height: '90px', borderRadius: '30px', background: 'var(--color-primary-ghost)', display: 'grid', placeItems: 'center', fontSize: '42px', margin: '0 auto 22px' }}>{EMOJI.medicine}</div>
             <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '26px', color: 'var(--color-text-primary)', marginBottom: '10px' }}>No reminders yet</h3>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '15px', lineHeight: 1.75, maxWidth: '380px', margin: '0 auto 28px' }}>
               Add medicine reminders to stay on top of your treatment plan every day.
@@ -303,7 +304,7 @@ export default function MedicineReminders() {
           </div>
         )}
 
-        {/* â”€â”€ Loading skeleton â”€â”€ */}
+        {/* Loading skeleton */}
         {loading && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {[0.6, 0.75, 0.9].map((op, i) => (
@@ -315,7 +316,7 @@ export default function MedicineReminders() {
           </div>
         )}
 
-        {/* â”€â”€ Reminders list â”€â”€ */}
+        {/* Reminders list */}
         {!loading && reminders.length > 0 && (
           <div className="fade-up-2">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
@@ -343,7 +344,7 @@ export default function MedicineReminders() {
                   >
                     {/* Icon */}
                     <div style={{ width: '54px', height: '54px', borderRadius: '18px', background: 'var(--color-primary-ghost)', display: 'grid', placeItems: 'center', fontSize: '26px', flexShrink: 0 }}>
-                      ðŸ’Š
+                      {EMOJI.medicine}
                     </div>
 
                     {/* Content */}
@@ -363,13 +364,13 @@ export default function MedicineReminders() {
                               display: 'inline-flex', alignItems: 'center', gap: '5px',
                             }}
                           >
-                            {slot.emoji} {slot.label} Â· {slot.time}
+                            {slot.emoji} {slot.label} {SYMBOL.bullet} {slot.time}
                           </span>
                         ))}
                       </div>
                       {r.notes && (
                         <div style={{ color: 'var(--color-text-muted)', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                          <span>ðŸ“</span> {r.notes}
+                          <span>{EMOJI.memo}</span> {r.notes}
                         </div>
                       )}
                     </div>
@@ -389,7 +390,7 @@ export default function MedicineReminders() {
                         opacity: deleting === r.id ? 0.55 : 1, whiteSpace: 'nowrap',
                       }}
                     >
-                      {deleting === r.id ? 'Removingâ€¦' : 'Remove'}
+                      {deleting === r.id ? `Removing${SYMBOL.ellipsis}` : 'Remove'}
                     </button>
                   </div>
                 )

@@ -4,18 +4,14 @@ function trimTrailingSlash(value) {
   return String(value || '').replace(/\/+$/, '')
 }
 
-const configuredBaseUrl = trimTrailingSlash(import.meta.env.VITE_API_BASE_URL)
-const fallbackBaseUrl = import.meta.env.DEV
-  ? 'http://localhost:5000'
-  : typeof window !== 'undefined'
-    ? trimTrailingSlash(window.location.origin)
-    : ''
+const BASE_URL = trimTrailingSlash(import.meta.env.VITE_API_URL || 'http://localhost:5000')
 
-export const API_BASE_URL = configuredBaseUrl || fallbackBaseUrl
+export { BASE_URL }
+export const API_BASE_URL = BASE_URL
 
 export function buildApiUrl(path) {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`
-  return `${API_BASE_URL}${normalizedPath}`
+  return `${BASE_URL}${normalizedPath}`
 }
 
 export function authHeaders(token) {
@@ -23,7 +19,7 @@ export function authHeaders(token) {
 }
 
 export const api = axios.create({
-  baseURL: API_BASE_URL || undefined,
+  baseURL: BASE_URL || undefined,
   headers: {
     'Content-Type': 'application/json',
   },

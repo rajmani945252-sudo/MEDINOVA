@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_BASE_URL } from '@/utils/api'
+import { SYMBOL } from '@/utils/ui'
 
 
 const G = {
@@ -60,7 +61,7 @@ function DayCard({ day, schedule, onChange }) {
         </div>
       )}
       {!isOn && (
-        <div style={{ padding:'14px 16px', textAlign:'center', color:'#CBD5E1', fontSize:'12px' }}>Day off â€” toggle to enable</div>
+        <div style={{ padding:'14px 16px', textAlign:'center', color:'#CBD5E1', fontSize:'12px' }}>Day off {SYMBOL.emDash} toggle to enable</div>
       )}
     </div>
   )
@@ -130,8 +131,8 @@ export default function DoctorAvailability() {
               </div>
               <div style={{ display:'flex', gap:'8px', flexWrap:'wrap' }}>
                 {[
-                  { label:'Active Days',  value: loading ? 'â€”' : enabledDays,  color:G[200] },
-                  { label:'Total Slots',  value: loading ? 'â€”' : totalSlots,   color:'#FEF08A' },
+                  { label:'Active Days',  value: loading ? SYMBOL.emDash : enabledDays,  color:G[200] },
+                  { label:'Total Slots',  value: loading ? SYMBOL.emDash : totalSlots,   color:'#FEF08A' },
                 ].map(c => (
                   <div key={c.label} style={{ background:'rgba(255,255,255,0.10)', border:'1px solid rgba(255,255,255,0.16)', borderRadius:'12px', padding:'10px 18px', textAlign:'center' }}>
                     <div style={{ fontSize:'22px', fontWeight:700, color:c.color }}>{c.value}</div>
@@ -148,7 +149,7 @@ export default function DoctorAvailability() {
           <span style={{ fontSize:'11px', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:'#94A3B8', marginRight:'4px' }}>Quick Set:</span>
           <button onClick={() => { const n={}; DAYS.slice(0,5).forEach(d => { n[d]={ enabled:true, slots:DEFAULT_SLOTS.slice(0,8), max_per_slot:1 } }); ['Saturday','Sunday'].forEach(d => { n[d]={ enabled:false, slots:[], max_per_slot:1 } }); setSchedule(n) }}
             style={{ padding:'7px 14px', borderRadius:'9px', border:`1px solid ${G[200]}`, background:G[50], color:G[800], fontWeight:700, fontSize:'12px', cursor:'pointer' }}>
-            Monâ€“Fri (Morning)
+            Mon{SYMBOL.enDash}Fri (Morning)
           </button>
           <button onClick={() => { const n={}; DAYS.forEach(d => { n[d]={ enabled:true, slots:DEFAULT_SLOTS.slice(0,10), max_per_slot:2 } }); setSchedule(n) }}
             style={{ padding:'7px 14px', borderRadius:'9px', border:`1px solid ${G[200]}`, background:G[50], color:G[800], fontWeight:700, fontSize:'12px', cursor:'pointer' }}>
@@ -160,14 +161,14 @@ export default function DoctorAvailability() {
           </button>
           <div style={{ marginLeft:'auto' }}>
             <button onClick={handleSave} disabled={saving} style={{ padding:'9px 24px', borderRadius:'11px', border:'none', background: saving ? '#94A3B8' : G[800], color:'#fff', fontWeight:700, fontSize:'13px', cursor:'pointer', display:'flex', alignItems:'center', gap:'7px' }}>
-              {saving ? 'â³ Savingâ€¦' : 'âœ“ Save Schedule'}
+              {saving ? `${SYMBOL.hourglass} Saving${SYMBOL.ellipsis}` : `${SYMBOL.check} Save Schedule`}
             </button>
           </div>
         </div>
 
         {/* Day cards grid */}
         {loading
-          ? <div style={{ background:'#fff', borderRadius:'18px', border:`1px solid ${G[100]}`, padding:'48px', textAlign:'center', color:'#94A3B8', fontSize:'14px' }}>Loading scheduleâ€¦</div>
+          ? <div style={{ background:'#fff', borderRadius:'18px', border:`1px solid ${G[100]}`, padding:'48px', textAlign:'center', color:'#94A3B8', fontSize:'14px' }}>Loading schedule{SYMBOL.ellipsis}</div>
           : <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:'14px' }}>
               {DAYS.map(day => (
                 <DayCard key={day} day={day} schedule={schedule[day]} onChange={handleChange} />
@@ -179,12 +180,12 @@ export default function DoctorAvailability() {
         <div style={{ marginTop:'20px', background:`linear-gradient(135deg,${G[900]} 0%,${G[800]} 100%)`, borderRadius:'18px', padding:'18px 24px', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:'14px', boxShadow:`0 8px 24px rgba(13,92,74,0.22)` }}>
           <div>
             <div style={{ fontSize:'14px', fontWeight:700, color:'#fff', marginBottom:'3px' }}>
-              {enabledDays} day{enabledDays!==1?'s':''} active Â· {totalSlots} total slots
+              {enabledDays} day{enabledDays!==1?'s':''} active {SYMBOL.bullet} {totalSlots} total slots
             </div>
             <div style={{ fontSize:'12px', color:G[100] }}>Patients will only be able to book within your active slots.</div>
           </div>
           <button onClick={handleSave} disabled={saving} style={{ padding:'12px 28px', borderRadius:'12px', border:'none', background:G[400], color:'#fff', fontWeight:700, fontSize:'14px', cursor:'pointer', opacity: saving ? 0.7 : 1 }}>
-            {saving ? 'â³ Savingâ€¦' : 'âœ“ Save Schedule'}
+            {saving ? `${SYMBOL.hourglass} Saving${SYMBOL.ellipsis}` : `${SYMBOL.check} Save Schedule`}
           </button>
         </div>
       </div>
