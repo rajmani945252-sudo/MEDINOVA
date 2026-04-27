@@ -59,15 +59,17 @@ function decodePart(value, fallback = '') {
   }
 }
 
-function resolveDatabaseConfig() {
-  const databaseUrlRaw = pickFirst(process.env.DATABASE_URL, process.env.MYSQL_URL);
+function parseDatabaseUrl(databaseUrlRaw) {
+  if (!databaseUrlRaw) {
+    return null;
+  }
 
-  if (databaseUrlRaw) {
+  try {
     const databaseUrl = new URL(databaseUrlRaw);
     const protocol = databaseUrl.protocol.replace(':', '').toLowerCase();
 
     if (!['mysql', 'mysql2'].includes(protocol)) {
-      throw new Error(`Unsupported database protocol: ${databaseUrl.protocol}`);
+      return null;
     }
 
     const databaseFromUrl = databaseUrl.pathname.replace(/^\/+/, '');
@@ -92,6 +94,16 @@ function resolveDatabaseConfig() {
         ssl: resolveSslConfig(databaseUrl),
       },
     };
+  } catch {
+    return null;
+  }
+}
+
+function resolveDatabaseConfig() {
+  const urlConfig = parseDatabaseUrl(process.env.MYSQL_URL) || parseDatabaseUrl(process.env.DATABASE_URL);
+
+  if (urlConfig) {
+    return urlConfig;
   }
 
   return {
