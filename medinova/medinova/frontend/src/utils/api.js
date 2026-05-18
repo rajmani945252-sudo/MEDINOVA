@@ -4,18 +4,17 @@ function trimTrailingSlash(value) {
   return String(value || '').replace(/\/+$/, '')
 }
 
-const DEFAULT_API_URL = import.meta.env.PROD
-  ? 'https://medinova-production.up.railway.app'
-  : 'http://localhost:5000'
-
-const BASE_URL = trimTrailingSlash(import.meta.env.VITE_API_URL || DEFAULT_API_URL)
+const LOCAL_API_URL = 'http://localhost:5000'
+const PRODUCTION_API_URL = 'https://medinova-production.up.railway.app'
+const configuredApiUrl = trimTrailingSlash(import.meta.env.VITE_API_URL)
+const BASE_URL = configuredApiUrl || (import.meta.env.DEV ? LOCAL_API_URL : PRODUCTION_API_URL)
 
 export { BASE_URL }
 export const API_BASE_URL = BASE_URL
 
 export function buildApiUrl(path) {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`
-  return `${BASE_URL}${normalizedPath}`
+  return BASE_URL ? `${BASE_URL}${normalizedPath}` : normalizedPath
 }
 
 export function authHeaders(token) {

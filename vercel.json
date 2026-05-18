@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "installCommand": "npm install --prefix medinova/medinova/frontend",
+  "buildCommand": "npm run build --prefix medinova/medinova/frontend",
+  "outputDirectory": "medinova/medinova/frontend/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

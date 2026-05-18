@@ -1,7 +1,12 @@
+const path = require('path');
 const mysql = require('mysql2');
 const mysqlPromise = require('mysql2/promise');
+const bcrypt = require('bcryptjs');
 
-require('dotenv').config();
+require('dotenv').config({
+  path: path.resolve(__dirname, '../.env'),
+  quiet: true,
+});
 
 const DEFAULT_DB_NAME = 'medinova';
 let databaseReady = false;
@@ -40,7 +45,7 @@ function resolveSslConfig(databaseUrl) {
 
   const normalizedValue = rawSslValue.toLowerCase();
 
-  if (['1', 'true', 'yes', 'require', 'required', 'prefer'].includes(normalizedValue)) {
+  if (['1', 'true', 'yes', 'on', 'require', 'required', 'prefer'].includes(normalizedValue)) {
     return { rejectUnauthorized: false };
   }
 
@@ -133,7 +138,7 @@ const poolConfig = {
   ...baseConfig,
   database: databaseName,
   waitForConnections: true,
-  connectionLimit: 10,
+  connectionLimit: parseInteger(process.env.DB_CONNECTION_LIMIT, 10),
   queueLimit: 0,
   decimalNumbers: true,
 };
@@ -305,6 +310,38 @@ async function ensureSchema() {
   }
 }
 
+async function ensureAdminUser() {
+  const adminEmail = pickFirst(process.env.ADMIN_EMAIL, process.env.DEFAULT_ADMIN_EMAIL).toLowerCase();
+  const adminPassword = pickFirst(process.env.ADMIN_PASSWORD, process.env.DEFAULT_ADMIN_PASSWORD);
+
+  if (!adminEmail || !adminPassword) {
+    return;
+  }
+
+  const adminName = pickFirst(process.env.ADMIN_NAME, process.env.DEFAULT_ADMIN_NAME, 'Medinova Admin');
+  const adminPhone = pickFirst(process.env.ADMIN_PHONE, process.env.DEFAULT_ADMIN_PHONE, '');
+
+  const [existingUsers] = await db.promise().query(
+    'SELECT id, role FROM users WHERE LOWER(email) = LOWER(?) LIMIT 1',
+    [adminEmail]
+  );
+
+  if (existingUsers.length > 0) {
+    await db.promise().query(
+      'UPDATE users SET role = ?, is_verified = 1 WHERE id = ?',
+      ['admin', existingUsers[0].id]
+    );
+    return;
+  }
+
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
+
+  await db.promise().query(
+    'INSERT INTO users (name, email, password, role, phone, is_verified) VALUES (?, ?, ?, ?, ?, 1)',
+    [adminName, adminEmail, hashedPassword, 'admin', adminPhone || null]
+  );
+}
+
 async function initializeDatabase() {
   if (databaseReady) {
     return true;
@@ -316,6 +353,7 @@ async function initializeDatabase() {
       await ensureDatabase();
       await db.promise().query('SELECT 1');
       await ensureSchema();
+      await ensureAdminUser();
       databaseReady = true;
       lastInitializationError = null;
       lastInitializedAt = new Date().toISOString();

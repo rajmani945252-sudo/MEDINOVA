@@ -1,7 +1,11 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 
-require('dotenv').config();
+require('dotenv').config({
+  path: path.resolve(__dirname, '.env'),
+  quiet: true,
+});
 
 const db = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
@@ -110,9 +114,21 @@ app.use((error, req, res, next) => {
 const PORT = Number(process.env.PORT || 5000);
 const HOST = process.env.HOST || '0.0.0.0';
 const DB_RETRY_DELAY_MS = Number(process.env.DB_RETRY_DELAY_MS || 5000);
+const RETRYABLE_DB_ERROR_CODES = new Set([
+  'PROTOCOL_CONNECTION_LOST',
+  'ECONNREFUSED',
+  'ECONNRESET',
+  'ETIMEDOUT',
+  'EAI_AGAIN',
+  'ENOTFOUND',
+]);
 
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isRetryableDatabaseError(error) {
+  return RETRYABLE_DB_ERROR_CODES.has(error?.code);
 }
 
 async function bootstrapDatabase() {
@@ -122,6 +138,11 @@ async function bootstrapDatabase() {
       return;
     } catch (error) {
       console.error('Database initialization failed:', error.message);
+
+      if (!isRetryableDatabaseError(error)) {
+        throw error;
+      }
+
       console.log(`Retrying database connection in ${DB_RETRY_DELAY_MS}ms...`);
       await wait(DB_RETRY_DELAY_MS);
     }
@@ -134,4 +155,5 @@ app.listen(PORT, HOST, () => {
 
 bootstrapDatabase().catch((error) => {
   console.error('Unexpected database bootstrap failure:', error.message);
+  process.exit(1);
 });

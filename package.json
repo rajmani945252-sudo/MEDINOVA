@@ -1,0 +1,13 @@
+{
+  "name": "medinova-root",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix medinova/medinova/backend start",
+    "backend": "npm --prefix medinova/medinova/backend start",
+    "build": "npm --prefix medinova/medinova/frontend run build",
+    "postinstall": "npm --prefix medinova/medinova/backend install"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}
